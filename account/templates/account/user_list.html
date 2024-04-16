@@ -1,0 +1,70 @@
+
+
+{% extends "_base.html" %}
+{% load static %} 
+{% load crispy_forms_tags %} 
+
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+      
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item"><a href="#">خانه</a></li>
+              <li class="breadcrumb-item active">جداول داده</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+         
+
+          <div class="card">
+     
+            <div class="card-body">
+				<h2>لیست کاربران</h2>
+				<table class="table table-striped">
+				<thead>
+				<tr>
+				<th>نام کاربر</th>
+				<th>تلفن</th>
+				<th>آدرس</th>
+				<th>نام کاربری</th>
+				<th>دسترسی</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for CustomUser in object_list %}
+				<tr>
+				<td>{{ CustomUser.fname }}</td>
+				<td>{{ CustomUser.mobile }}</td>
+				<td>{{ CustomUser.address }}</td>
+				<td>{{ CustomUser.username }}</td>
+				<td>{{ CustomUser.AccessLevel }}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+				</table>
+{% endblock content %}
+
+</div>
+<!-- /.card-body -->
+</div>
+<!-- /.card -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

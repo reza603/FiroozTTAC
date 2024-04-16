@@ -1,0 +1,157 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %} 
+{% load static %} 
+
+{% block page_title %}
+orders list
+{% endblock page_title %}
+ {% block style %}
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Document</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+ integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+ <!-- Latest compiled and minified JavaScript -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+     integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+     crossorigin="anonymous"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+         <style>
+  #myProgress {
+    width: 100%;
+    background-color: #ddd;
+  }
+  .not-visible{
+    display: none;
+}
+  #myBar {
+    width: 10%;
+    height: 30px;
+    background-color: #04AA6D;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+  }
+  </style>
+
+{% endblock style%} 
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1> بارگذاری فایل جدید</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item"><a href="#">خانه</a></li>
+              <li class="breadcrumb-item active"> بارگذاری فایل جدید</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content container">
+      <div class="row">
+        <div class="col-12">
+         
+          <form method="post" enctype="multipart/form-data"  id="upload_form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button  class="btn btn-primary"   type="submit">Upload</button>
+          </form>
+        
+        </div>
+        <div class="container not-visible progress" id="progress">
+        </div>
+        <!-- /.col -->
+        
+
+
+
+ {% if errors.myerror == "err"%}
+
+  <div class="progress-bar progress-bar-striped bg-success" 
+  role="progressbar" style="width: ${percentProgress}%" aria-valuenow="${percentProgress}" aria-valuemin="0" 
+  aria-valuemax="100">
+</div>
+
+ <div class="alert alert-light" role="alert">
+
+   {{errors.myerror }} 
+   <br>
+   <p>فایل با موفقیت بارگزاری نشد،مجددا تلاش نمایید
+
+  </p>
+
+
+</div>
+
+ {% elif errors.myerror == "ok"%}
+ <div class="progress-bar progress-bar-striped bg-success" 
+ role="progressbar" style="width: ${percentProgress}%" aria-valuenow="${percentProgress}" aria-valuemin="0" 
+ aria-valuemax="100">
+</div>
+<div class="alert alert-success" role="alert">
+ <p>فایل با موفقیت بارگزاری شد
+ </p>
+</div>
+{% elif errors.myerror == "get"%}
+ <div class="progress-bar progress-bar-striped bg-success" 
+ role="progressbar" style="width: ${percentProgress}%" aria-valuenow="${percentProgress}" aria-valuemin="0" 
+ aria-valuemax="100">
+</div>
+<div class="alert alert-info" role="alert">
+ <p>بارگذاری فایل در سامانه
+ </p>
+</div>
+ {% endif %}
+ 
+
+
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock content%}
+{% block script%}
+{
+<script src="{% static 'order/fileupload/script.js'%}"></script>
+<script>
+  var i = 0;
+  function move() {
+    if (i == 0) {
+      i = 1;
+      var elem = document.getElementById("myBar");
+      var width = 10;
+      var id = setInterval(frame, 10);
+      function frame() {
+        if (width >= 100) {
+          clearInterval(id);
+          i = 0;
+        } else {
+          width++;
+          elem.style.width = width + "%";
+          elem.innerHTML = width  + "%";
+        }
+      }
+    }
+  }
+  </script>
+  
+{% endblock script%}
+

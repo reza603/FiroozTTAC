@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="TemplateMo">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <title>سامانه مرکزی استعلام اصالت کالا-شرکت همگام خودروی آسیا</title>
+    {%load static%}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'inquiryHistory/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'inquiryHistory/assets/css/fontawesome.css' %}">
+    <link rel="stylesheet" href="{% static 'inquiryHistory/assets/css/templatemo-edu-meeting.css' %}">
+    <link rel="stylesheet" href="{% static 'inquiryHistory/assets/css/owl.css' %}">
+    <link rel="stylesheet" href="{% static 'inquiryHistory/assets/css/lightbox.css">
+	  <link rel="stylesheet" href="{% static 'inquiryHistory/assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'inquiryHistory/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/126ed90cd8.js" crossorigin="anonymous"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+<script src="https://kit.fontawesome.com/126ed90cd8.js" crossorigin="anonymous"></script> 
+<!--
+
+TemplateMo 569 Edu Meeting
+
+https://templatemo.com/tm-569-edu-meeting
+
+-->
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 300px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 40%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+@media (max-width: 700px) {
+  .card { 
+    min-width:100%;  !important;
+    left:2%; !important;
+    flex-direction:column;
+    position:initial;
+  }
+
+.example{
+
+    min-width:100%;  !important;
+    left:2%; !important;
+    flex-direction:column;
+}
+  }
+  
+  @media (min-width: 701px) and (max-width: 1200px) {
+    .card { 
+      min-width:600px;;  !important;
+      left:22%; !important;
+      flex-direction:column;
+      position:absolute;
+    margin-top:2%;
+  }
+  .example{
+
+    min-width:500px;  !important;
+    left:2%; !important;
+    flex-direction:column;
+}
+#frmuuid{
+  margin-left:2%;
+  float:right;
+}
+#frmrndesalat{
+  margin-right:2%;
+  float:left;
+}
+}
+  
+  @media (min-width: 1201px) {
+    .card { 
+      min-width:500px;  !important;
+      left:2%; !important;
+      flex-direction:column;
+      position:relative;
+
+  }
+  .example{
+
+    min-width:100%;  !important;
+    left:2%; !important;
+    flex-direction:column;
+    
+  
+}
+  }
+</style>
+  </head>
+
+<body>
+
+  <!-- Sub Header -->
+  <div class="sub-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-sm-8">
+          <div class="left-content">
+                 <p><h4 style="color:white;"> HAMGAM KHODROO ASIA CORPORATION.</h4> </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-4">
+          <div class="right-icons">
+            <ul>
+              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="#"><i class="fa fa-behance"></i></a></li>
+              <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <nav class="main-nav">
+                      <!-- ***** Logo Start ***** -->
+                     
+                      <ul class="nav">
+                          <li class="scroll-to-section">   <h1 style="color:white;align:top;">  همگام خودروی آسیا سامانه مرکزی کنترل اصالت کالا<h1></li>
+                         
+                      </ul>        
+                     
+                      <!-- ***** Menu End ***** -->
+                  </nav>
+              </div>
+          </div>
+      </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <!-- ***** Main Banner Area Start ***** -->
+  <section class="section main-banner" id="top" data-section="section1">
+      <video autoplay muted loop id="bg-video">
+          <source src="{% static 'inquiryHistory/assets/images/course-video.mp4' %}" type="video/mp4" />
+      </video>
+
+      <div class="video-overlay header-text"  >
+          
+            <div class="row">
+              <div class="col-lg-4" >
+                   <div class="card" style=" padding-left:30px;border-radius:30px;margin-top:25%;left:15%;background-image:url({% static 'inquiryHistory/assets/images/r.png' %});background-repeat:no-repeat;"   >
+                    <br />
+            
+   <form class="example" id="frmrndesalat"  style="max-width:300px;" >
+                          {% csrf_token %}        
+                          <input type="text" placeholder="Search.." name="txtrnd"   id="txtrndesalat" maxlenth="16" required>
+                          <button type="submit"  id="btnrndesalat" class="myBtn" ><i class="fa fa-search"></i></button>
+                         </form>
+						 <br /><br /><br /><br /><br /><br />
+                </div>
+              </div>
+			    <div class="col-lg-4">
+                <div class="card" style="padding-left:30px;border-radius:30px;margin-top:25%;left:80%;background-image:url({% static 'inquiryHistory/assets/images/u.png' %});background-repeat:no-repeat;"   >
+            <br />
+      <form class="example" id="frmuuid"  style="max-width:300px;" >
+                          {% csrf_token %}        
+                          <input type="text" placeholder="Search.." name="txtuuid"   id="txtuuid" maxlenth="16" required >
+                          <button  type="submit" id="btnuuid" class="myBtn" ><i class="fa fa-search"></i></button>
+                         </form>
+						 <br /><br /><br /><br /><br /><br />
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </section>
+  <!-- ***** Main Banner Area End ***** -->
+
+
+<!-- Trigger/Open The Modal
+<button id="myBtn">Open Modal</button>
+ -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h3>سامانه مرکزی استعلام شرکت همگام خودرو آسیا</h3>
+      
+    </div>
+    <div class="modal-body">
+      <h2> <p style="color:black;font-size:20px" id="result">test</p></h2>
+    </div>
+    <div class="modal-footer">
+      <h3 style="color:white;"><a href="{% url 'showinquiryform' %}">خروج   </a></h3>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+
+		  
+ 
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+   
+
+
+
+	
+
+    <script>
+      // Create Django Ajax Call
+      $("form").submit(function() {
+      
+          var uuidinput = $('input[name="txtuuid"]').val().trim();
+          var rndinput = $('input[name="txtrnd"]').val().trim();
+          
+    
+          if (uuidinput|| rndinput) {
+            var dataurl = (uuidinput)? '{% url "uuidInquiry" %}': '{% url "RndEsalatInquiry" %}';
+            var datainput = (uuidinput)?uuidinput:rndinput;
+            var isuidvalue= (uuidinput)?'yes':'no';
+            
+              // Create Ajax Call
+              $.ajax({
+                  url:dataurl,
+                  data: {
+                      'item': datainput,
+                      'isuid':isuidvalue
+                      
+                  },
+                  dataType: 'json',
+                  success: function (data) {
+                      if (data.items) {
+                        showresult(data.items);
+                      }
+                  }
+              });
+            } else {
+              alert("All fields must have a valid value.");
+          }
+          $('form').trigger("reset");
+      
+          return false;
+      });
+    
+    
+    
+    
+    
+    
+    
+      function showresult(item) {
+        if (item.uuid!='')
+        {
+          $('#result').text('اصالت کالا مورد تایید می باشد') ;
+          $(".modal-header").css({"background-color": "green"});
+          $(".modal-footer").css({"background-color": "green"});
+         }else
+         {
+           $('#result').text('کالایی با این شناسه در سامانه  ثبت نشده است') ;
+           $(".modal-header").css({"background-color": "red"});
+           $(".modal-footer").css({"background-color": "red"});
+           $(".close").css({"color": "yellow"});
+
+
+
+         }
+        $(".modal").css({"display": "block"});
+       
+    
+      }
+      $(".close").click(function(){
+       
+      $(".modal").css({"display": "none"});
+      });
+     
+    
+      
+      
+      </script>
+</body>
+
+</body>
+</html>

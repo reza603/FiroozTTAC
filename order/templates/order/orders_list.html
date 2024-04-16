@@ -1,0 +1,143 @@
+{% extends '_base.html' %}
+{% load static %} 
+{% block page_title %}
+orders list
+{% endblock page_title %}
+{% block style %}
+<script src="https://kit.fontawesome.com/126ed90cd8.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{% static  'order/style.css' %}">
+<link rel="stylesheet" href="{% static  'order/plugins/jbox/css/jBox.css' %}">
+<link rel="stylesheet" href="{% static  'order/plugins/jbox/css/jBox.Confirm.css' %}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+<link rel="stylesheet" href="{% static  'order/style.css' %}">
+
+{% endblock style%}
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1فایلهای بارگذاری شده</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-left">
+              <li class="breadcrumb-item"><a href="#">خانه</a></li>
+              <li class="breadcrumb-item active">جداول داده</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+         
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">لیست فایلهای بارگذاری شده</h3>
+
+           
+
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>       
+                <tr>
+                  <th>شماره فاکتور </th>
+                  <th>شماره سفارش </th>
+                  <th>کد محصول</th>
+                  <th>تعداد </th>
+                  <th>کاربر</th>
+                  <th>تاریخ بارگذاری</th>
+                  <th> وضعیت فایل</th>
+            
+                  
+                
+                
+                </tr>
+                </thead>
+                <tbody>
+                {%if orders.count > 0 %}
+              {% for order in orders %}
+               <tr> 
+                  <td>{{order.invoicenumber_id}}</td>
+                  <td>{{order.id}}</td>
+
+                  <td>{{order.GTIN_id}}</td>
+                  <td>{{order.no}} </td>
+                
+                  <td>{{order.status}}</td>
+                  <td>{{order.date_created}}</td>
+                  <td class="align-top">
+                 
+     
+          <a href="{% url 'delete'  pk=order.id  %}"  data-confirm="Are you want to  delete this file?"  title="delete file"  class="btn btn-danger tbl-btn float-Right">
+            <i class="fas fa-trash-alt"></i></a>
+       
+                      {% if order.status == 'en' %}
+                      <a href ="{% url 'updatepause'  order.id  %}" class="btn  tbl-btn float-left"   style="color:green ">
+                        <i class="fa fa-pause-circle-o" ></i> غیرفعال
+                      </a>
+                      
+                        {% else %}
+                        <a href ="{% url 'updateplay'  order.id  %}"  class="btn tbl-btn float-left "  style="color:gray">
+                          <i class="fa fa-play-circle-o "></i>  فعال  
+                         </a>
+                    
+                        {% endif %}
+
+                   </td>
+                </tr>
+               {% endfor %}
+               {% endif %}
+                        </tbody>
+                <tfoot>
+                 
+                        <tr>
+                         
+                        </tr>
+                      
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock content%}
+{% block script%}
+<script src="{% static 'order/fileupload/script.js'%}"></script>
+   <!-- JAVASCRIPT FILES -->
+   <script type="text/javascript" src="{% static 'order/plugins/jbox/js/jBox.js'%}"></script>
+   <script type="text/javascript" src="{% static 'order/plugins/jbox/js/jBox.Confirm.js' %}"></script>
+   <script type="text/javascript">
+       $(document).ready(function() {
+           new jBox('Confirm', {
+               cancelButton: 'No',
+               confirmButton: 'Yes',
+           });
+       });
+
+       function delete_record(route) {
+           window.location = route;
+       }
+   </script>
+{% endblock script%}
+

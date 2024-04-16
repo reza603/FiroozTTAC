@@ -1,0 +1,246 @@
+{% load static %} 
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+      <img src="{% static  'order/dist/img/Logo.png' %}" alt="Hamgom Logo" class="brand-image img-circle elevation-3"
+           style="opacity: 1">
+      <span class="brand-text font-weight-light">سامانه استعلام </span>
+      <br/>
+      <span class="brand-text font-weight-light">  گروه بهداشتی فیروز </span>
+
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar" style="direction: ltr">
+      <div style="direction: rtl">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <img src="{% static  'order/dist/img/KH.JPG' %}" class="img-circle elevation-2" alt="User Image">
+          </div>
+          <div class="info">
+            {% if user.is_authenticated %}
+           
+            <span style="Color:green"> Welcome,{{user.username}}|</span> <a href="{% url 'logout' %}" > Log Out</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="d-block">Log In</a>
+            {% endif %}
+          </div>
+        </div>
+        {% if user.is_authenticated %}
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+                 with font-awesome or any other icon font library -->
+            <li class="nav-item has-treeview menu-open">
+              <a href="#" class="nav-link active">
+                <i class="nav-icon fa fa-dashboard"></i>
+                <p>
+                  داشبوردها
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'panel' %}" class="nav-link active">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p>داشبورد استعلام</p>
+                  </a>
+                </li>          
+              </ul>
+            </li>
+            
+            
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  استعلام محصولات
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'showinquiryform' %}" class="nav-link">
+                    <i class="fa fa-qrcode nav-icon"></i>
+                    <p> استعلام با کد 20 رقمی</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'showinquiryform' %}" class="nav-link">
+                    <i class="fa fa-qrcode nav-icon"></i>
+                    <p> استعلام با کد 16 رقمی  </p>
+                  </a>
+                </li>
+               
+              </ul>
+            </li>  
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  مدیریت فایلهای XML
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'UploadFiles' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> بارگذاری فایل جدید</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'order_list' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> مدیریت فایلهای قبلی</p>
+                  </a>
+                </li>
+               
+              </ul>
+            </li>   
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  مدیریت شرکتها 
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'companycreate' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> ثبت شرکت جدید</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'companylist' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> نمایش لیست شرکتها</p>
+                  </a>
+                </li>
+               
+              </ul>
+            </li>  
+           
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  مدیریت وظایف بازرسان 
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'createinspection' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> ثبت وظیفه جدید</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'inspectionlist' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> نمایش لیست وظایف</p>
+                  </a>
+                </li>
+               
+              </ul>
+            </li>  
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  مدیریت محصولات 
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'createproduct' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> ثبت محصول جدید</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'productslist' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> نمایش لیست محصولات</p>
+                  </a>
+                </li>
+               
+              </ul>
+            </li>   
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  مدیریت کاربران                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'signup' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> ثبت کاربر جدید</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'userslist' %}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> نمایش لیست کاربران</p>
+                  </a>
+                </li>
+               
+              </ul>
+            </li> 
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-pie-chart"></i>
+                <p>
+                  نمودارها
+                  <i class="right fa fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{%  static 'order/pages/charts/chartjs.html'%}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> توزیع کالا  به تفکیک استان</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{%  static 'order/pages/charts/flot.html'%}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> توزیع کالا  به تفکیک شهر/منطقه</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{%  static 'order/pages/charts/inline.html'%}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> وضعیت استعلام مشتریان به تفکیک استان</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{%  static 'order/pages/charts/inline.html'%}" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p> وضعیت استعلام مشتریان به تفکیک شهر/منطقه</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+        
+
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+    </div>
+    <!-- /.sidebar -->
+    {% endif %}
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
