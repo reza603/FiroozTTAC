@@ -1,0 +1,31 @@
+<service>
+	<id>arshamwarehouseappservice.exe</id>
+	<name>arsham-warehouse-app-service</name>
+	<description>Node.js service for Arsham Warehouse APP to save data on sql server.</description>
+	<executable>C:\Program Files\nodejs\node.exe</executable>
+	<argument>--harmony</argument>
+	<argument>E:\Mojtaba\Programing\NodeJs\node-js-crud-sql-server\HandheldAPI\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>E:\Mojtaba\Programing\NodeJs\node-js-crud-sql-server\HandheldAPI\server.js</argument>
+	<argument>--scriptoptions=</argument>
+	<argument>--log</argument>
+	<argument>arsham-warehouse-app-service wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.25</argument>
+	<argument>--wait</argument>
+	<argument>1</argument>
+	<argument>--maxrestarts</argument>
+	<argument>3</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<logmode>rotate</logmode>
+	<stoptimeout>30sec</stoptimeout>
+	<serviceaccount>
+		<domain>MOJTABA-LAP</domain>
+		<user>LocalSystem</user>
+		<password></password>
+	</serviceaccount>
+	<workingdirectory>E:\Mojtaba\Programing\NodeJs\node-js-crud-sql-server\HandheldAPI</workingdirectory>
+</service>
