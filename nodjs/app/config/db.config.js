@@ -1,9 +1,9 @@
 module.exports = {
-    HOST: "127.0.0.1",
+    HOST: "185.231.115.248",
     PORT: "1433",
     USER: "sa",
     PASSWORD: "amf@sql2022",
-    DB: "AMF_DB",
+    DB: "amf_db",
     dialect: "mssql",
     pool: {
       max: 5,
