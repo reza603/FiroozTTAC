@@ -452,7 +452,6 @@ exports.Insert = async (req, res) => {
       },
       type: QueryTypes.INSERT,
     });
-    console.log(rows);
     res.send(rows);
   } catch (err) {
     // Handle any errors or exceptions here
@@ -507,4 +506,4 @@ exports.updateStats = async (req, res) => {
     // Send an error response with the error message
     res.status(500).json({ message: 'Something went wrong', error: err.message });
   }
-};  
+};

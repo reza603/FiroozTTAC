@@ -105,17 +105,33 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'amf_frz_db2',
-        'USER': 'djangouser',
-        'PASSWORD': 'amf@psql2022',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+#DATABASES = {
+#   'default': {
+#      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'NAME': 'amf_frz_db2',
+#    'USER': 'djangouser',
+#   'PASSWORD': 'amf@psql2022',
+#  'HOST': 'localhost',
+#       'PORT': '',
+#    }
+#}
 
+
+
+DATABASES = {
+'default': {
+#'ENGINE': 'sql_server.pyodbc',
+'ENGINE':'mssql',
+'NAME': 'amf_db',
+'USER': 'sa',
+'PASSWORD': 'amf@sql2022',
+'HOST': '185.231.115.248',
+'PORT': '1433',
+'OPTIONS': {
+'driver': 'ODBC Driver 17 for SQL Server',
+},
+}
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

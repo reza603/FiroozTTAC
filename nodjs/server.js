@@ -22,6 +22,14 @@ app.use(express.json());  /* bodyParser.json() is deprecated */
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));   /* bodyParser.urlencoded() is deprecated */
 
+// Development environment log
+app.use((req, res, next) => {
+  console.log(`→→→→→→→ ${req.method}, ${req.protocol}://${req.get('host')}${req.originalUrl}`);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+  next();
+});
+
 const db = require("./app/models");
 
 db.sequelize.sync();
