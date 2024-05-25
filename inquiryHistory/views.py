@@ -6,6 +6,8 @@ from companies.models import Company
 from order.models import tblOrder,tblXmlOrders
 from Shipping.models import Shipping
 from ShippingDetails.models import ShippingDetail
+from ShippingDetails.models import  ScanLogs,WarehouseOrders
+
 from InspectionDetails.models import inspectionDetail
 from inspections.models import Inspection
 
@@ -21,8 +23,42 @@ import hashlib
 import requests
 import json
 import datetime
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
+from django.http import JsonResponse
+
+
+from django.db.models import Prefetch
+
+
+def get_sorted_scans_with_company_nid(request):
+  # Get the 'uuid' from the GET request's parameters
+  uuid = request.GET.get('item', None)
+
+  if uuid is not None:
+    # Prefetch related WarehouseOrders to minimize database hits
+    warehouse_orders_prefetch = Prefetch('whOrderId', queryset=WarehouseOrders.objects.only('DistributerCompanyNid'))
+
+    # Retrieve ScanLogs records with the given UUID, sorted by createdAt
+    scan_logs_list = ScanLogs.objects.filter(uuid=uuid).prefetch_related(warehouse_orders_prefetch).order_by('-createdAt')
+
+    # Construct the response data
+    response_data = [
+    {
+    'whOrderId': scan_log.whOrderId_id,
+    'DistributerCompanyNid': scan_log.whOrderId.DistributerCompanyNid if scan_log.whOrderId else None,
+    'createdAt': scan_log.createdAt,
+    'updatedAt': scan_log.updatedAt
+    }
+    for scan_log in scan_logs_list
+    ]
+
+    return JsonResponse(response_data, safe=False)
+  else:
+    return JsonResponse({'error': 'UUID parameter is required.'}, status=400)
+
+
 
 def uidinspection(request):
    uuid= request.GET.get('item', None)  
