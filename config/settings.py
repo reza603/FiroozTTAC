@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-$r4i7=qy1up6b+^=a3f7hvdcpk=#4j^ct=%q1buyad!@_vklp!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['185.231.115.248','*']
+ALLOWED_HOSTS = ['127.0.0.1','127.0.0.1\sqlexpress']
 
 
 # Application definition
@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'ShippingDetails',
     'Tasks',
     'companies',
-    
 ]
 
 MIDDLEWARE = [
@@ -70,7 +69,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'config.urls'
 
@@ -87,9 +89,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                    'django.template.context_processors.media', #<-- HEREوعسث هئشلث عحمخشی هد حشلث  صثذسهفث
-            ],
-        },
+                'django.template.context_processors.media',
+]       
+ },
     },
 ]
 
@@ -105,16 +107,40 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'amf_frz_db2',
+    #     'USER': 'djangouser',
+    #     'PASSWORD': 'amf@psql2022',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'amf_frz_db2',
-        'USER': 'djangouser',
-        'PASSWORD': 'amf@psql2022',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+'default': {
+'ENGINE': 'mssql',
+'NAME': 'amf_db',
+'USER': 'sa',
+'PASSWORD': 'amf@sql',
+'HOST': '127.0.0.1\\SQLEXPRESS',
+'PORT': '',
+'OPTIONS': {
+'driver': 'ODBC Driver 17 for SQL Server',
+},
 }
+}
+
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'sql_server.pyodbc',
+#        'NAME': 'amf_db',
+#        'USER': 'sa',
+#        'PASSWORD': 'amf@sql',
+#        'HOST': '127.0.0.1',
+#        'PORT': '1433',
+#    }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -152,8 +178,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL='media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL  = 'static/'
+str(BASE_DIR.joinpath('templates')) 
+#str(BASE_DIR.joinpath('media'))
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 

@@ -37,18 +37,18 @@
 				<tr>
 				<th>نام محصول</th>
 				<th>gtin</th>
-				<th>irc</th>
-				<th>company</th>
-				<th> price</th>
+				<th>پروانه بهداشتی محصول</th>
+				<th>شرکت سازنده</th>
+				<th> قیمت</th>
 				</tr>
 				</thead>
 				<tbody>
 				{% for product in object_list %}
 				<tr>
-				<td>{{ product.name }}</td>
+				<td>{{ product.product_fr_name }}</td>
 				<td>{{ product.gtin }}</td>
 				<td>{{ product.irc }}</td>
-				<td>{{ product.oc }}</td>
+				<td>{{ product.producer_company_code}}</td>
 				<td>{{ product.price }}</td>
 				</tr>
 				{% endfor %}

@@ -1,5 +1,5 @@
 from django.urls import path
-
+from .import views
 from .views import CompanyCreateView, CompanyListView,CompanyAPIView
 
 urlpatterns = [
@@ -10,5 +10,5 @@ path("companylist/", CompanyListView.as_view(), name="companylist"),
 
 
 urlpatterns += [
-path('companieslist/', CompanyAPIView.as_view(), name='companieslist'),
+# path('companieslist/', views.company_list, name='companieslist'),
 ]

@@ -1,16 +1,13 @@
 from django.shortcuts import render,redirect
 from .models import inquiryHistory
-from barcode.models import Barcode
+from barcode.models import  ScanLogs
+from account.models import WarehouseOrders,WhUsers,CustomUser
 from products.models import Product
 from companies.models import Company
-from order.models import tblOrder,tblXmlOrders
-from Shipping.models import Shipping
+
 from ShippingDetails.models import ShippingDetail
 from InspectionDetails.models import inspectionDetail
 from inspections.models import Inspection
-
-
-from account.models import CustomUser
 from .forms import InqueryForm
 from django.shortcuts import get_object_or_404
 from .serializers import ItemSerializer
@@ -29,28 +26,28 @@ def uidinspection(request):
    user = request.user.id
    
    if len(uuid)==20: 
-       barcodeinstance=Barcode.objects.filter( UUID=uuid).first()
-       if barcodeinstance != None:
+       scanloginstance=ScanLogs.objects.filter( UUID=uuid).first()
+       if scanloginstance != None:
         # inspecinstance=Inspection.objects.filter(user_id=user).last() 
         # inspectionDetail.objects.create(Inspection=inspecinstance,uid=barcodeinstance)
-        order = get_object_or_404(tblOrder, id=barcodeinstance.order_id)
+        whorderinstance = get_object_or_404(WarehouseOrders,orderid =scanloginstance.whorderid)
         # Get the related objects by foreign keys
-        orderxml = get_object_or_404(tblXmlOrders, id=order.invoicenumber_id)
-        product = get_object_or_404(Product, gtin=order.GTIN_id)
+        companyinstance = get_object_or_404(Company, NationalId=whorderinstance.DistributerCompanyNid)
+        product = get_object_or_404(Product, gtin=whorderinstance.GTIN)
         # shippingDetail = get_object_or_404(ShippingDetail, uid=uuid)
         inspectionJson=[]
         companies=[]
-      
-        shippingDetails=ShippingDetail.objects.filter(uid=uuid).order_by('date_modified')
-        for shippingdetail  in shippingDetails:
-            shipping = get_object_or_404(Shipping,id=shippingdetail.shipping_id)
-            company=get_object_or_404(Company,nid=shipping.shippingTo_id)
+        scanlogsAlls=ScanLogs.objects.filter(uid=uuid).order_by('updatedAt')
+        for scanlogsAll  in scanlogsAlls:
+            whorderinstance = get_object_or_404(WarehouseOrders,orderid =scanloginstance.whorderid)
+            companyinstance = get_object_or_404(Company, NationalId=whorderinstance.DistributerCompanyNid)
+    
             company_data = {
                               "company": {
-                              "name":company.name,
-                              "nid": company.nid,
-                              "tel": company.tel,
-                              "address": company.address
+                              "name":companyinstance.CompanyFaName,
+                              "nid": companyinstance.NationalId,
+                              "tel": companyinstance.phone,
+                              "address": companyinstance.address
                               }
             }
             companies.append(company_data)
@@ -58,12 +55,12 @@ def uidinspection(request):
 
         
 
-        user = get_object_or_404(CustomUser, id=orderxml.User_id)
+        CustomUserinstance = get_object_or_404(CustomUser, id=user)
         # Create a dictionary of the order data
         order_data_array=[]
         order_data = {
         "Order": {
-        "id": orderxml.id,
+        "id": whorderinstance.id,
         "mfg": order.md,
         "exp": order.ed,
         "lot": order.bn,
@@ -134,7 +131,8 @@ def uuidInquiryToInspection(request):
          user_row=[]
          
          
-         uuid = request.GET.get('item', None)   
+         uuid = request.GET.get('item', None)[6:20]  
+         print(uuid)
          row=Barcode.objects.filter(UUID=uuid).first()
          if row  :
               Order_row=tblOrder.objects.filter(orderid=row.tblOrder).first()

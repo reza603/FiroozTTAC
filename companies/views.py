@@ -4,6 +4,8 @@ from .forms import CompanyForm
 from rest_framework import viewsets
 from .serializers import  CompanySerializer
 from rest_framework import generics
+from django.shortcuts import render
+
 class CompanyCreateView(CreateView):
     model = Company
     form_class = CompanyForm
@@ -18,6 +20,9 @@ class CompanyAPIView(generics.ListAPIView):
   queryset = Company.objects.all()
   serializer_class = CompanySerializer
   
-  
-  
+
+
+# def company_list(request):
+#     companies = Company.objects.all()
+#     return render(request, 'company_list.html', {'companies': companies})
 

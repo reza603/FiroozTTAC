@@ -27,16 +27,16 @@ Including another URLconf
 
 urlpatterns = [
      path('admin/', admin.site.urls),
-     path('order/',include('order.urls')),
+    #  path('order/',include('order.urls')),
      path('account/',include('django.contrib.auth.urls')),
      path('account/',include('account.urls')),
      path('inquiry/',include('inquiryHistory.urls')),
      path('products/',include('products.urls')),
      path('companies/',include('companies.urls')),
-     path('tasks/',include('Tasks.urls')),
+    #  path('tasks/',include('Tasks.urls')),
      path('inspections/',include('inspections.urls')),
      path('InspectionDetails/',include('InspectionDetails.urls')),
-     path('shipping/',include('Shipping.urls')),
+    #  path('shipping/',include('Shipping.urls')),
      
      
      

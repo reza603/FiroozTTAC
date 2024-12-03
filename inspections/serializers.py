@@ -17,5 +17,5 @@ class InspectionSerializer(serializers.ModelSerializer):
   class Meta:
     model = Inspection
     #fields = "__all__"
-    fields = ['id', 'user', 'company', 'task','referdate']
+    fields = ['id', 'user', 'NationalId', 'task','referdate']
 
