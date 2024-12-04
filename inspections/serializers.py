@@ -10,12 +10,13 @@ class UserSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
   class Meta:
     model = Company
-    fields = [ 'name', 'nid', 'address', 'tel', 'address']
+    fields = ["national_id", "company_fa_name","phone","address", "prefix"]  
+
 class InspectionSerializer(serializers.ModelSerializer):
   user = UserSerializer() # use the nested serializer for the user field
   company = CompanySerializer() # use the nested serializer for the company field
   class Meta:
     model = Inspection
     #fields = "__all__"
-    fields = ['id', 'user', 'NationalId', 'task','referdate']
+    fields = ['id', 'user', 'company', 'task','referdate']
 

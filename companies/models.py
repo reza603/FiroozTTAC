@@ -1,7 +1,6 @@
 from django.db import models
 
 class Company(models.Model):
-
     id = models.BigAutoField(primary_key=True, db_column='Id', verbose_name='شناسه')
     internal_id = models.BigIntegerField(null=True, db_column='InternalID', verbose_name='شناسه داخلی')
     national_id = models.CharField(max_length=11, db_column='NationalId',unique=True, verbose_name='شناسه ملی')
