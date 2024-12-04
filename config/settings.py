@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-$r4i7=qy1up6b+^=a3f7hvdcpk=#4j^ct=%q1buyad!@_vklp!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','127.0.0.1\sqlexpress']
+
+ALLOWED_HOSTS = ['199.203.18.44','localhost','127.0.0.1','127.0.0.1\sqlexpress']
 
 
 # Application definition
@@ -231,11 +232,22 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, 'Templates'),
 )
+
+
 REST_FRAMEWORK = {
 'DEFAULT_AUTHENTICATION_CLASSES': [
 'rest_framework.authentication.TokenAuthentication',
-]
+],
+'DEFAULT_PERMISSION_CLASSES': [
+'rest_framework.permissions.IsAuthenticated',
+],
 }
+
+# REST_FRAMEWORK = {
+# 'DEFAULT_AUTHENTICATION_CLASSES': [
+# 'rest_framework.authentication.TokenAuthentication',
+# ]
+# }
 # Enable / disable maintenance mode.
 # Default: False
 #MAINTENANCE_MODE = True  # or ``False`` and use ``maintenance`` command

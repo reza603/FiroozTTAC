@@ -8,7 +8,7 @@ urlpatterns = [
   
     path('rndesalat/', views.RndEsalatInquiry,name='RndEsalatInquiry'),
     path('uuid/', views.uuidInquiry,name='uuidInquiry'),
-     path('inspectionuuid/', views.uidinspection,name='uidinspection'),
+     path('inspectionuuid/', views.uidinspection,name='uidinspection'),#ok
     path('showform/', views.show_inquiry_form,name='showinquiryform'),
 
     path ('getsms/', views.getSMS),

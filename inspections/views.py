@@ -1,6 +1,36 @@
 from django.views.generic.list import ListView
 from .models import Inspection
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
+from .models import Inspection
+from .serializers import InspectionSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
+from .models import Inspection
+from .serializers import InspectionSerializer
+
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
+from .models import Inspection
+from .serializers import InspectionSerializer
+
+class UserInspectionListAPIView(ListAPIView):
+    serializer_class = InspectionSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+def get_queryset(self):
+    if self.request.user and self.request.user.is_authenticated:
+         return Inspection.objects.filter(user=self.request.user)
+    else:
+         return Inspection.objects.none()
+
+
+
 class InspectionListView(ListView):
     model = Inspection
     template_name = 'inspections/inspection_list.html'
@@ -44,7 +74,7 @@ from .models import Inspection
 class InspectionDeleteView(DeleteView):
     model = Inspection
     template_name = 'inspections/inspection_confirm_delete.html'
-    success_url = reverse_lazy('inspections')
+    success_url = reverse_lazy('')
 
 
 from rest_framework.generics import ListAPIView

@@ -20,24 +20,30 @@ import json
 import datetime
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
-
+#ok
 def uidinspection(request):
    uuid= request.GET.get('item', None)  
    user = request.user.id
-   
-   if len(uuid)==20: 
-       scanloginstance=ScanLogs.objects.filter( UUID=uuid).first()
+   print("uid:")
+   print(uuid)
+   print("user::")
+   print(user)
+   if len(str(uuid))==20: 
+       scanloginstance=ScanLogs.objects.filter( uuid=uuid).first()
+       print(scanloginstance)
        if scanloginstance != None:
         # inspecinstance=Inspection.objects.filter(user_id=user).last() 
         # inspectionDetail.objects.create(Inspection=inspecinstance,uid=barcodeinstance)
         whorderinstance = get_object_or_404(WarehouseOrders,orderid =scanloginstance.whorderid)
         # Get the related objects by foreign keys
+        print(whorderinstance)
         companyinstance = get_object_or_404(Company, NationalId=whorderinstance.DistributerCompanyNid)
         product = get_object_or_404(Product, gtin=whorderinstance.GTIN)
         # shippingDetail = get_object_or_404(ShippingDetail, uid=uuid)
         inspectionJson=[]
         companies=[]
-        scanlogsAlls=ScanLogs.objects.filter(uid=uuid).order_by('updatedAt')
+        print( whorderinstance)
+        scanlpogsAlls=ScanLogs.objects.filter(uid=uuid).order_by('updatedAt')
         for scanlogsAll  in scanlogsAlls:
             whorderinstance = get_object_or_404(WarehouseOrders,orderid =scanloginstance.whorderid)
             companyinstance = get_object_or_404(Company, NationalId=whorderinstance.DistributerCompanyNid)
