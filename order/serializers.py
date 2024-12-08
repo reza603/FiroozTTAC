@@ -3,7 +3,7 @@ from .models import Inspection
 from account.models import CustomUser
 from companies.models import  Company
 from products.models import  Product
-from .models import  tblOrder,tblXmlOrders
+from .models import  tblOrder,tblXmlOrders,Orders
 
 class CompanySerializer(serializers.ModelSerializer):
   class Meta:
@@ -23,6 +23,13 @@ class tblorderSerializer(serializers.ModelSerializer):
   class Meta:
     model = tblOrder
     fields = "__all__"
+class OrderSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = Orders
+    fields = "__all__"
+
+
 
 
 

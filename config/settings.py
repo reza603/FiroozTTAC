@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -27,7 +28,7 @@ SECRET_KEY = 'django-insecure-$r4i7=qy1up6b+^=a3f7hvdcpk=#4j^ct=%q1buyad!@_vklp!
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['199.203.18.44','localhost','127.0.0.1','127.0.0.1\sqlexpress']
+ALLOWED_HOSTS = ['199.203.18.49','localhost','127.0.0.1','127.0.0.1\sqlexpress','192.168.3.27']
 
 
 # Application definition
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
+    'rest_authtoken',
     'maintenancemode', 
     'maintenance_mode',
     'bootstrap4',
@@ -235,13 +237,17 @@ TEMPLATE_DIRS = (
 
 
 REST_FRAMEWORK = {
-'DEFAULT_AUTHENTICATION_CLASSES': [
-'rest_framework.authentication.TokenAuthentication',
-],
-'DEFAULT_PERMISSION_CLASSES': [
-'rest_framework.permissions.IsAuthenticated',
-],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+
+
 
 # REST_FRAMEWORK = {
 # 'DEFAULT_AUTHENTICATION_CLASSES': [

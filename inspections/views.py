@@ -1,155 +1,90 @@
-from django.views.generic.list import ListView
-from .models import Inspection
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView
-from .models import Inspection
+from django.shortcuts import render,redirect
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from .serializers import InspectionSerializer
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-class UserInspectionListAPIView(ListAPIView):
-    serializer_class = InspectionSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-def get_queryset(self):
-    if self.request.user and self.request.user.is_authenticated:
-         return Inspection.objects.filter(user=self.request.user)
-    else:
-         return Inspection.objects.none()
-
-
-
-class InspectionListView(ListView):
-    model = Inspection
-    template_name = 'inspections/inspection_list.html'
-    context_object_name = 'inspections'
-    paginate_by = 10
-
-
-from django.views.generic.detail import DetailView
-from .models import Inspection
-
-class InspectionDetailView(DetailView):
-    model = Inspection
-    template_name = 'inspections/inspection_detail.html'
-    context_object_name = 'inspection'
-
-from django.views.generic.edit import CreateView
+from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView
 from .models import Inspection
 from .forms import InspectionForm
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from .models import Inspection
+from .serializers import InspectionSerializer
+from rest_framework import generics
+from rest_framework import viewsets
+
+from .serializers import InspectionSerializer
+
 
 class InspectionCreateView(CreateView):
+ model = Inspection
+ form_class = InspectionForm
+ template_name = "inspections/inspection_form.html"
+ success_url = "/inspections/inspectionlist" # change this to your desired url
+
+
+class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
+    # This viewset will only allow GET requests (list and retrieve)
+    permission_classes = [IsAuthenticated] # This will require a valid token for authentication
+    serializer_class = InspectionSerializer
+
+    def get_queryset(self):
+    # This will filter the inspection records by the user id of the current user
+     return Inspection.objects.filter(user_id=self.request.user.id)
+
+
+
+
+
+
+class inspectionListView(ListView):
     model = Inspection
-    form_class = InspectionForm
-    template_name = 'inspections/inspection_form.html'
-    success_url = '/inspections/'
+    template_name = "/inspections/inspection_list.html"
+# class InspectionViewSet(viewsets.ModelViewSet):
+#  #permission_classes = [IsAuthenticated]
+#  queryset = Inspection.objects.all()
+#  serializer_class = InspectionSerializer
 
-from django.views.generic.edit import UpdateView
-from .models import Inspection
-from .forms import InspectionForm
-
-class InspectionUpdateView(UpdateView):
-    model = Inspection
-    form_class = InspectionForm
-    template_name = 'inspections/inspection_form.html'
-    success_url = '/inspections/'
-
-
-from django.views.generic.edit import DeleteView
-from django.urls import reverse_lazy
-from .models import Inspection
-
-class InspectionDeleteView(DeleteView):
-    model = Inspection
-    template_name = 'inspections/inspection_confirm_delete.html'
-    success_url = reverse_lazy('')
-
-
-from rest_framework.generics import ListAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-class InspectionListAPIView(ListAPIView):
+class inspectionListAPIView(generics.ListAPIView):
     queryset = Inspection.objects.all()
     serializer_class = InspectionSerializer
 
 
 
-from rest_framework.generics import RetrieveAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-class InspectionDetailAPIView(RetrieveAPIView):
-    queryset = Inspection.objects.all()
-    serializer_class = InspectionSerializer
 
 
 
-from rest_framework.generics import CreateAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-class InspectionCreateAPIView(CreateAPIView):
-    queryset = Inspection.objects.all()
-    serializer_class = InspectionSerializer
 
 
+class InspectionView(APIView):
+    http_method_names = ["CreateAPIInspection", "getTaskAPI"]
+    permission_classes = [IsAuthenticated]
 
-from rest_framework.generics import UpdateAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-class InspectionUpdateAPIView(UpdateAPIView):
-    queryset = Inspection.objects.all()
-    serializer_class = InspectionSerializer
-
-from rest_framework.generics import DestroyAPIView
-from .models import Inspection
-from .serializers import InspectionSerializer
-
-class InspectionDeleteAPIView(DestroyAPIView):
-    queryset = Inspection.objects.all()
-    serializer_class = InspectionSerializer
-
-from django import forms
-from .models import Inspection
-
-class InspectionForm(forms.ModelForm):
-    class Meta:
-        model = Inspection
-        fields = ['task', 'user', 'company', 'referdate']
-
-from rest_framework import serializers
-from .models import Inspection
-from account.models import CustomUser
-from companies.models import Company
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'fname', 'lname', 'mobile', 'username', 'password']
-
-class CompanySerializer(serializers.ModelSerializer):
-    class Meta:
-     model = Company
-     fields = ["company", "company_fa_name", "phone", "address", "prefix"]
-
-class InspectionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()  # Nested serializer for the user field
-    company = CompanySerializer()  # Nested serializer for the company field
-
-    class Meta:
-     model = Inspection
-    fields = "__all__"
+    def CreateAPIInspection(self, request, format=None):
+    # Get the user from the request
+        user = request.user
+        # Get the data from the request
+        data = request.data
+        # Add the user id to the data
+        data["user_id"] = user.id
+        # Serialize the data using the serializer
+        serializer = InspectionSerializer(data=data)
+        # Validate and save the data if valid
+        if serializer.is_valid():
+         serializer.save()
+         # Return the serialized data and status code 201 (Created)
+         return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # Return the validation errors and status code 400 (Bad Request)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class InspectionView(APIView):
+    http_method_names = ["getTaskAPI"]
+   # permission_classes = [IsAuthenticated]
+    def getTaskAPI(self, request, format=None):
+        # Get all the inspections from the database
+        inspections = Inspection.objects.all()
+        # Serialize them to JSON using the serializer
+        serializer = InspectionSerializer(inspections, many=True)
+        # Return the JSON response with status code 200 (OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
