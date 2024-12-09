@@ -18,22 +18,18 @@ class Barcode(models.Model):
     models.Index(fields=['RndEsalat',]),
     models.Index(fields=['UUID',]),
 ]
-
-
-
-
-class ScanLogs(models.Model):
+class ScanLog(models.Model):
     id = models.AutoField(primary_key=True)
     whOrderId = models.IntegerField(null=True, blank=True)
     whUserId = models.IntegerField(null=True, blank=True)
     uuid = models.CharField(max_length=20, null=True, blank=True)
     createdAt = models.DateTimeField(null=True, blank=True)
     updatedAt = models.DateTimeField(null=True, blank=True)
-
+    orderid= models.CharField(max_length=20, null=True, blank=True)
     class Meta:
         managed = False
         db_table = 'ScanLogs'
     constraints = [
-    models.ForeignKey('WarehouseOrders', on_delete=models.CASCADE, db_column='whOrderId'),
-    models.ForeignKey('WhUsers', on_delete=models.SET_NULL, null=True, db_column='whUserId')
+    models.ForeignKey('account.WarehouseOrder', on_delete=models.CASCADE, db_column='whOrderId'),
+    models.ForeignKey('account.WhUser', on_delete=models.SET_NULL, null=True, db_column='whUserId')
     ]

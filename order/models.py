@@ -3,8 +3,8 @@ from typing import Any
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct  import deconstructible
-from django.db import models
-class Orders(models.Model):
+from django.db import models                    
+class Order(models.Model):
     Id = models.BigAutoField(primary_key=True)
     OrderCode = models.CharField(max_length=20, unique=True)
     ProductCode = models.CharField(max_length=14, null=True, blank=True)

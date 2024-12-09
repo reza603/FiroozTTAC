@@ -50,14 +50,6 @@ class inspectionListView(ListView):
 class inspectionListAPIView(generics.ListAPIView):
     queryset = Inspection.objects.all()
     serializer_class = InspectionSerializer
-
-
-
-
-
-
-
-
 class InspectionView(APIView):
     http_method_names = ["CreateAPIInspection", "getTaskAPI"]
     permission_classes = [IsAuthenticated]

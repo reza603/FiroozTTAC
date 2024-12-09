@@ -16,7 +16,6 @@ class CustomUser(AbstractUser):
    
        def __str__(self):
          return str(self.fname)
-
 class WarehouseOrder(models.Model):
   id = models.AutoField(primary_key=True)
   OrderId = models.IntegerField()
@@ -34,13 +33,10 @@ class WarehouseOrder(models.Model):
   details = models.CharField(max_length=100, null=True)
   userId = models.IntegerField(null=True)
   documentCode = models.CharField(max_length=20, null=True)
-
   class Meta:
     db_table = 'WarehouseOrders'
     managed = False
-
-
-class WhUsers(models.Model):
+class WhUser(models.Model):
   id = models.AutoField(primary_key=True)
   fname = models.CharField(max_length=255, null=True, blank=True)
   lname = models.CharField(max_length=255, null=True, blank=True)
@@ -54,5 +50,5 @@ class WhUsers(models.Model):
   accepter_user_id = models.IntegerField(null=True, blank=True)
 
   class Meta:
-    managed = False
-    db_table = 'WhUsers'
+     managed = False
+     db_table = 'WhUsers'

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import inquiryHistory
-from barcode.models import  ScanLogs
+from barcode.models import  ScanLog,Barcode
 from account.models import WarehouseOrder,CustomUser
 from products.models import Product
 from companies.models import Company
@@ -49,19 +49,19 @@ def uidinspection(request):
     print("user::")
     print(user)
     if len(uuid)==20: 
-       scanloginstance=ScanLogs.objects.filter( uuid=uuid).first()
+       scanloginstance=ScanLog.objects.filter( uuid=uuid).first()
        print(scanloginstance)
        if scanloginstance != None:
-          whorderinstance = get_object_or_404(WarehouseOrders,orderid =scanloginstance.whorderid)
+          whorderinstance = get_object_or_404(WarehouseOrder,orderid =scanloginstance.whorderid)
           print(whorderinstance)
           companyinstance = get_object_or_404(Company, NationalId=whorderinstance.DistributerCompanyNid)
           product = get_object_or_404(Product, gtin=whorderinstance.GTIN)
           inspectionJson=[]
           companies=[]
           print( whorderinstance)
-          scanlpogsAlls=ScanLogs.objects.filter(uid=uuid).order_by('updatedAt')
+          scanlpogsAlls=ScanLog.objects.filter(uid=uuid).order_by('updatedAt')
           for scanlogsAll  in scanlpogsAlls:
-                whorderinstance = get_object_or_404(WarehouseOrders,orderid =scanloginstance.whorderid)
+                whorderinstance = get_object_or_404(WarehouseOrder,orderid =scanloginstance.whorderid)
                 companyinstance = get_object_or_404(Company, NationalId=whorderinstance.DistributerCompanyNid)
                 company_data = {
                                   "company": {
