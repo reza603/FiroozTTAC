@@ -26,9 +26,10 @@ SECRET_KEY = 'django-insecure-$r4i7=qy1up6b+^=a3f7hvdcpk=#4j^ct=%q1buyad!@_vklp!
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-
 ALLOWED_HOSTS = ['199.203.18.49','localhost','127.0.0.1','127.0.0.1\sqlexpress','192.168.3.27']
+#  ALLOWED_HOSTS = ['172.16.10.27','localhost','127.0.0.1','178.252.151.59']
+
+
 
 
 # Application definition
@@ -133,7 +134,19 @@ DATABASES = {
 },
 }
 }
-
+# DATABASES = {
+# 'default': {
+# 'ENGINE': 'mssql',
+# 'NAME': 'amf_db',
+# 'USER': 'sa',
+# 'PASSWORD': 'amf@sql2019',
+# 'HOST': '172.16.10.27',
+# 'PORT': '1433',
+# 'OPTIONS': {
+# 'driver': 'ODBC Driver 17 for SQL Server',
+# },
+# }
+# }
 # DATABASES = {
 #    'default': {
 #        'ENGINE': 'sql_server.pyodbc',
