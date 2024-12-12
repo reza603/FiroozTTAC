@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 import json
 import datetime
 from account.models import CustomUser
+from django.db import models
 
 
 class CompanyCreateView(CreateView):
@@ -25,7 +26,8 @@ class CompanyListView(ListView):
     template_name = "companies/company_list.html"
     
 class CompanyAPIView(generics.ListAPIView):
-  queryset = Company.objects.all()
+  queryset = Company.objects.all().order_by('company_fa_name')
+
   serializer_class = CompanySerializer
   
 

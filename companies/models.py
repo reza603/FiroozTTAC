@@ -26,8 +26,10 @@ class Company(models.Model):
     created_at = models.DateTimeField(null=True, db_column='createdAt', verbose_name='تاریخ ایجاد')
     updated_at = models.DateTimeField(null=True, db_column='updatedAt', verbose_name='تاریخ بهروزرسانی')
     invoice_prefix = models.CharField(max_length=10, null=True, db_column='InvoicePrefix', verbose_name='پیشوند فاکتور')
+    
     class Meta:
         db_table = 'Companies'
+        ordering = ['company_fa_name']
         managed = False  # This ensures that Django does not try to manage the table's schema
     def __str__(self):
      result = self.company_fa_name or self.company_en_name or "Unnamed Company"

@@ -55,7 +55,7 @@ class InspectionUUIDAPIView(APIView):
 
     def get_companies(self, uuid):  
             companies = []  
-            scanlogs_all = ScanLog.objects.filter(uuid=uuid).order_by('updatedAt')  
+            scanlogs_all = ScanLog.objects.filter(uuid=uuid).order_by('createdAt')  
             logger.warning(f" scanlogs_all: {scanlogs_all.count()}")  
 
             for scanlog in scanlogs_all:  
@@ -75,7 +75,8 @@ class InspectionUUIDAPIView(APIView):
                         "name": company_instance.company_fa_name,  
                         "nid": company_instance.national_id,  
                         "tel": company_instance.phone,  
-                        "address": company_instance.address  
+                        "address": company_instance.address  ,
+                        "scanDate":scanlog.createdAt.strftime("%Y-%m-%d %H:%M:%S")
                         }  
                         }  
                         companies.append(company_data)  
