@@ -35,6 +35,42 @@ class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
      return Inspection.objects.filter(user_id=self.request.user.id)
 
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Inspection
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_task_done(request):
+    task_id = request.data.get('taskid')
+    if not task_id:
+        return Response({"error": "Task ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        inspection = Inspection.objects.get(id=task_id, user=request.user)
+        inspection.done = True
+        inspection.save()
+        return Response({"message": "Task marked as done"}, status=status.HTTP_200_OK)
+    except Inspection.DoesNotExist:
+        return Response({"error": "Task not found or you do not have permission to modify this task"}, status=status.HTTP_404_NOT_FOUND)
+
+# class MarkTaskDoneView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def post(self, request, format=None):
+#      task_id = request.data.get('taskid')
+#      if not task_id:
+#         return Response({"error": "Task ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+#      try:
+#             inspection = Inspection.objects.get(id=task_id, user=request.user)
+#             inspection.done = True
+#             inspection.save()
+#             return Response({"message": "Task marked as done"}, status=status.HTTP_200_OK)
+#         except Inspection.DoesNotExist:
+#             return Response({"error": "Task not found or you do not have permission to modify this task"}, status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -42,6 +78,7 @@ class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
 class inspectionListView(ListView):
     model = Inspection
     template_name = "/inspections/inspection_list.html"
+    context_object_name = 'object_list'
 # class InspectionViewSet(viewsets.ModelViewSet):
 #  #permission_classes = [IsAuthenticated]
 #  queryset = Inspection.objects.all()

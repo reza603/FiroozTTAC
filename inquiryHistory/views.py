@@ -18,6 +18,7 @@ class InspectionUUIDAPIView(APIView):
 
     def get(self, request):  
         uuid = request.GET.get('item')  
+        taskid = request.GET.get('taskid')  
         logger.debug(f'Received uuid: {uuid}')  
 
         # Validate UUID  
@@ -41,7 +42,12 @@ class InspectionUUIDAPIView(APIView):
         # Construct and return the inspection JSON response  
         inspection_json = self.construct_inspection_json(order_instance, product_instance, user, companies)  
         return JsonResponse(inspection_json, status=200)  
-
+    def mark_task_done(request):
+      user = request.user
+      inspection = get_object_or_404(Inspection, uuid=uuid)
+      inspection.done = True
+      inspection.save()
+      return redirect('some_view_name')  # Redirect to a relevant page after updating
     def is_valid_uuid(self, uuid):  
       
              return uuid and len(uuid) == 20  
@@ -130,7 +136,6 @@ def show_inquiry_form(request):
       item={}    
       return render( request,'inquiryHistory/inquiry.html',{'item': item})
 def uuidInquiryToInspection(request):
-        
        if request.GET.get('isuid')=='yes'  :
          item={}  
          row=[]

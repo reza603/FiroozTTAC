@@ -1,7 +1,10 @@
 {% extends "_base.html" %}
 {% load static %} 
 {% load crispy_forms_tags %} 
+{% block style %}
+{% comment %} <link rel="stylesheet" href="{% static  'inspections/style.css' %}"> {% endcomment %}
 
+{% endblock style %}
 {% block content %}
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -37,31 +40,39 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-				<h2>List of inspections</h2>
-				<table class="table table-striped">
+				<h2>لیست بازرسی ها</h2>
+				<table class=" table table-striped">
 				<thead>
 				<tr>
-				<th>Title</th>    
-				<th>User</th>
-				<th>Company</th>
-				<th>CreateAt</th>
-				<th>UpdateAt</th>
-				<th>ReferDate</th>
+				<th>عنوان</th>    
+				<th>بازرس</th>
+				<th>شرکت مقصد</th>
+				<th>تاریخ ثبت</th>
+				<th>تاریخ آخرین اصلاح</th>
+				<th>تاریخ بازرسی</th>
+				<th>وضعیت بازرسی</th>
+
 				</tr>
 				</thead>
 				<tbody>
-				{% for Inspection in object_list %}
-				<tr>
-				<td>{{ Inspection.task }}</td>
-			
-				<td>{{ Inspection.user }}</td>
-				<td>{{ Inspection.company }}</td>
-				<td>{{ Inspection.date_created }}</td>
-				<td>{{ Inspection.date_modified }}</td>
-				<td>{{ Inspection.referdate }}</td>
-				</tr>
-				{% endfor %}
-				</tbody>
+          {% for inspection in object_list %}
+          <tr>
+          <td>{{ inspection.task }}</td>
+          <td>{{ inspection.user }}</td>
+          <td>{{ inspection.company }}</td>
+          <td>{{ inspection.date_created }}</td>
+          <td>{{ inspection.date_modified }}</td>
+          <td>{{ inspection.referdate }}</td>
+          <td style="background-color: {% if inspection.done %}#4CAF50{% else %}#f44336{% endif %}; color: white;">
+          {% if inspection.done %}
+          انجام شده
+          {% else %}
+          ناتمام
+          {% endif %}
+          </td>
+          </tr>
+          {% endfor %}
+          </tbody>
 				</table>
 {% endblock content %}
 
