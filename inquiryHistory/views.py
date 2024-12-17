@@ -26,11 +26,12 @@ class InspectionUUIDAPIView(APIView):
 
         # Retrieve ScanLog instance  
         scanloginstance = ScanLog.objects.filter(uuid=uuid).first()  
+        logger.debug(f'scanloginstance: {scanloginstance}') 
         if not scanloginstance:  
              return self.error_response(f"Not found, there is no uuid with this value: {uuid}", 404)  
 
         # Collect company data  
-        companies = self.get_companies(uuid)  
+        companies = self.get_companies(uuid,scanloginstance)  
 
         # Retrieve related Order and Product instances  
         order_instance = get_object_or_404(Order, OrderCode=scanloginstance.orderid)  
@@ -53,8 +54,19 @@ class InspectionUUIDAPIView(APIView):
             }  
             return JsonResponse(error, status=status)  
 
-    def get_companies(self, uuid):  
+    def get_companies(self, uuid,scanloginstance):  
             companies = []  
+            
+            company_data = {  
+            "company": {  
+            "name": 'گروه بهداشتی فیروز',
+            "nid": '10100651897',  
+            "tel": '۴۴۲۰۵۴۲۶-۴ -۰۲۱ | ۰۲۱-۴۴۲۳۶۲۵۲-۴ واحد صادرات: ۰۲۱۴۴۲۳۶۲۵۲ داخلی ۲۴۳',  
+            "address":'قزوین، شهرصنعتی البرز٬ حکمت هشتم٬ شرکت گروه بهداشتی فیروز'  ,
+            "scanDate":scanloginstance.createdAt.strftime("%Y-%m-%d %H:%M:%S")
+            }  
+            }  
+            companies.append(company_data)  
             scanlogs_all = ScanLog.objects.filter(uuid=uuid).order_by('createdAt')  
             logger.warning(f" scanlogs_all: {scanlogs_all.count()}")  
 
@@ -83,6 +95,7 @@ class InspectionUUIDAPIView(APIView):
                      else:  
                     # Optional: Log the missing outgoing order  
                         logger.warning(f"No outgoing warehouse order found for ScanLog ID: {scanlog.id} with whOrderId: {scanlog.whOrderId}")  
+                        
                 else:  
                         # Optional: Log cases where whOrderId is None  
                         logger.warning(f"ScanLog ID: {scanlog.id} does not have a valid whOrderId.")  
@@ -240,8 +253,8 @@ def getSMS(request):
         text="طول کد ارسالی نامعتبر است"
     else:
          text="اصالت کالا مورد تایید نیست"    
-    sendSmsViaGet (text,frm)
-    return HttpResponse(text )
+         endSmsViaGet (text,frm)
+         return HttpResponse(text )
 def sendSMS(text,to):
     #
     # Python samples are made with Requests: HTTP for Humans
