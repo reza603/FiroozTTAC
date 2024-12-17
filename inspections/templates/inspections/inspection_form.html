@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load static %}
+
 {% load crispy_forms_tags %}
 {% load bootstrap4 %}
 
@@ -33,7 +34,7 @@
 </div>
 <!-- /.card-header -->
 <div class="card-body">
-<h1>Create a new task</h1>
+<h1>ایجاد بازرسی جدید</h1>
 <form method="post" enctype="multipart/form-data">
 {% csrf_token %}
 {{ form|crispy }}
