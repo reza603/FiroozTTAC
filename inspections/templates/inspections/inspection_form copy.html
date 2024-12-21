@@ -1,0 +1,66 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load jalali_tags %}
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+{% endblock extra_css %}
+
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+<div class="container-fluid">
+<div class="row mb-2">
+<div class="col-sm-6">
+<h1>فایلهای بارگذاری شده</h1>
+</div>
+<div class="col-sm-6">
+<ol class="breadcrumb float-sm-left">
+<li class="breadcrumb-item"><a href="#">خانه</a></li>
+<li class="breadcrumb-item active">جداول داده</li>
+</ol>
+</div>
+</div>
+</div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+<div class="row">
+<div class="col-12">
+<div class="card">
+<div class="card-header">
+<!-- Card header content -->
+</div><!-- /.card-header -->
+<div class="card-body">
+<h1>ایجاد بازرسی جدید</h1>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form|crispy }}
+<button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>
+</div><!-- /.card-body -->
+</div><!-- /.card -->
+</div><!-- /.col -->
+</div><!-- /.row -->
+</section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// Check if the datepicker script is loaded
+if (typeof jalaliDatepicker !== 'undefined') {
+jalaliDatepicker.startWatch();
+} else {
+console.error('Jalali datepicker script not loaded.');
+}
+});
+</script>
+{% endblock extra_js %}

@@ -1,10 +1,13 @@
 from django.db import models # type: ignore
 from companies.models import Company
+from django_jalali.db import models as jmodels
+from jalali_date.fields import JalaliDateField
 class Inspection(models.Model):
   task = models.CharField(max_length=50, verbose_name="عنوان")
   user = models.ForeignKey('account.CustomUser', on_delete=models.CASCADE, verbose_name="بازرس")
   company = models.ForeignKey('companies.Company', to_field='national_id', db_column='company_id', on_delete=models.CASCADE, verbose_name="مکان مراجعه")
-  referdate = models.DateTimeField(verbose_name="تاریخ مراجعه")
+  # referdate = models.DateTimeField(verbose_name="تاریخ مراجعه")
+  refer_date = JalaliDateField()
   done = models.BooleanField(default=False, verbose_name="status")
   date_created = models.DateTimeField(auto_now_add=True)
   date_modified = models.DateTimeField(auto_now=True)
@@ -15,6 +18,7 @@ class Inspection(models.Model):
    
    
    
+
    # from django.db import models
 # from companies.models import Company
 # class Inspection(models.Model):

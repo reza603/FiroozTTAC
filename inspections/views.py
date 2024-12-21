@@ -6,6 +6,8 @@ from django.views.generic import CreateView, ListView
 from django.views.generic import CreateView
 from .models import Inspection
 from .forms import InspectionForm
+from django.http import request
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,15 +16,24 @@ from .models import Inspection
 from .serializers import InspectionSerializer
 from rest_framework import generics
 from rest_framework import viewsets
-
+# from jalali_date import datetime2jalali
+from .utils import datetime2jalali  # type: ignore
 from .serializers import InspectionSerializer
 
 
+
 class InspectionCreateView(CreateView):
- model = Inspection
- form_class = InspectionForm
- template_name = "inspections/inspection_form.html"
- success_url = "/inspections/inspectionlist" # change this to your desired url
+    model = Inspection
+    form_class = InspectionForm
+    template_name = "inspections/inspection_form.html"
+    success_url = "/inspections/inspectionlist"  # Change this to your desired URL
+def my_view(request):
+    inspection = Inspection.objects.get(id=1)
+    jalali_date = datetime2jalali(inspection.refer_date).strftime('%Y/%m/%d')
+    return render(request, 'inspections/inspection_form.html', {'jalali_date': jalali_date})
+
+
+# Create your views here.
 
 
 class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
@@ -72,7 +83,10 @@ def mark_task_done(request):
 #         except Inspection.DoesNotExist:
 #             return Response({"error": "Task not found or you do not have permission to modify this task"}, status=status.HTTP_404_NOT_FOUND)
 
+from jalali_date import datetime2jalali, date2jalali
 
+def my_view(request):
+	jalali_join = datetime2jalali(request.user.date_joined).strftime('%y/%m/%d _ %H:%M:%S')
 
 
 class inspectionListView(ListView):

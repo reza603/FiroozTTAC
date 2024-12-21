@@ -12,6 +12,41 @@ DEBUG = True
 ALLOWED_HOSTS = ['185.231.115.248', '172.16.10.27', 'localhost', '127.0.0.1', '178.252.151.59']
 
 
+# default settings (optional)
+# JALALI_DATE_DEFAULTS = {
+#    # if change it to true then all dates of the list_display will convert to the Jalali.
+#    'LIST_DISPLAY_AUTO_CONVERT': False,
+#    'Strftime': {
+#         'date': '%y/%m/%d',
+#         'datetime': '%H:%M:%S _ %y/%m/%d',
+#     },
+#     'Static': {
+#         'js': [
+#             # loading datepicker
+#             'admin/js/django_jalali.min.js',
+#             # OR
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc.js',
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
+#             # 'admin/js/main.js',
+#         ],
+#         'css': {
+#             'all': [
+#                 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
+#             ]
+#         }
+#     },
+# }
+LANGUAGE_CODE = 'fa'
+
+import locale
+locale.setlocale(locale.LC_ALL, "Persian_Iran.UTF-8")
+# in other OS
+# LANGUAGE_CODE = 'fa'
+
+# import locale
+# locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 INSTALLED_APPS = [
 'django.contrib.admin',
 'django.contrib.auth',
