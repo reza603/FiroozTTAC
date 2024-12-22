@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-$r4i7=qy1up6b+^=a3f7hvdcpk=#4j^ct=%q1buyad!@_vklp!
 DEBUG = True
 
 # ALLOWED_HOSTS = ['qrcode.firooz.com', '172.16.10.27', 'localhost', '127.0.0.1', '178.252.151.59']
-ALLOWED_HOSTS = ['185.231.115.248', '172.16.10.27', 'localhost', '127.0.0.1', '178.252.151.59']
+ALLOWED_HOSTS = ['199.203.18.37','185.231.115.248', '172.16.10.27', 'localhost', '127.0.0.1', '178.252.151.59']
 
 
 # default settings (optional)

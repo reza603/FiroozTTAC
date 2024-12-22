@@ -6,131 +6,157 @@ from django.shortcuts import get_object_or_404  ,render
 from django.http import JsonResponse  
 from rest_framework.permissions import IsAuthenticated  
 from rest_framework.views import APIView  
-from barcode.models import ScanLog  ,Barcode
+from barcode.models import ScanLog  
 from account.models import WarehouseOrder  
 from products.models import Product  
 from companies.models import Company  
-from order.models import Order  
-logger = logging.getLogger(__name__)  
+from inspections.models import Inspection  
+from InspectionDetails.models import inspectionDetail  
+import logging
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from order.models import  Order
 
-class InspectionUUIDAPIView(APIView):  
-    permission_classes = [IsAuthenticated]  
+logger = logging.getLogger(__name__)
 
-    def get(self, request):  
-        uuid = request.GET.get('item')  
-        taskid = request.GET.get('taskid')  
-        logger.debug(f'Received uuid: {uuid}')  
+class InspectionUUIDAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-        # Validate UUID  
-        if not self.is_valid_uuid(uuid):  
-            return self.error_response("Structure error on uuid (must be 20 digits)", 404)  
+    def get(self, request):
+        uuid = request.GET.get('item')
+        taskid = request.GET.get('taskid')
+        logger.debug(f'Received uuid: {uuid},{taskid}')
 
-        # Retrieve ScanLog instance  
-        scanloginstance = ScanLog.objects.filter(uuid=uuid).first()  
-        logger.debug(f'scanloginstance: {scanloginstance}') 
-        if not scanloginstance:  
-             return self.error_response(f"Not found, there is no uuid with this value: {uuid}", 404)  
+        # Validate UUID
+        if not self.is_valid_uuid(uuid):
+            return self.error_response("Structure error on uuid (must be 20 digits)", 404)
 
-        # Collect company data  
-        companies = self.get_companies(uuid,scanloginstance)  
+        # Retrieve ScanLog instance
+        scanloginstance = ScanLog.objects.filter(uuid=uuid).first()
+        logger.debug(f'scanloginstance: {scanloginstance}')
+        if not scanloginstance:
+            return self.error_response(f"Not found, there is no uuid with this value: {uuid}", 404)
 
-        # Retrieve related Order and Product instances  
-        order_instance = get_object_or_404(Order, OrderCode=scanloginstance.orderid)  
-        product_instance = get_object_or_404(Product, gtin=order_instance.ProductCode)  
-        user = request.user  
+        # Collect company data
+        companies = self.get_companies(uuid, scanloginstance)
+        logger.debug(f'companiew: {companies}')  
+        # Retrieve related Order and Product instances
+        order_instance = get_object_or_404(Order, OrderCode=scanloginstance.orderid)
+        product_instance = get_object_or_404(Product, gtin=order_instance.ProductCode)
+        user = request.user
 
-        # Construct and return the inspection JSON response  
-        inspection_json = self.construct_inspection_json(order_instance, product_instance, user, companies)  
-        return JsonResponse(inspection_json, status=200)  
-    def mark_task_done(request):
-      user = request.user
-      inspection = get_object_or_404(Inspection, uuid=uuid)
-      inspection.done = True
-      inspection.save()
-      return redirect('some_view_name')  # Redirect to a relevant page after updating
-    def is_valid_uuid(self, uuid):  
-      
-             return uuid and len(uuid) == 20  
+        # Insert into inspectionDetail if taskid is provided
+        if taskid:
+            logger.debug('if taskid :')
+            self.create_inspection_detail(taskid, uuid)
 
-    def error_response(self, message, status):  
- 
-            error = {  
-            "code": str(status),  
-            "msg": message  
-            }  
-            return JsonResponse(error, status=status)  
+        # Construct and return the inspection JSON response
+        inspection_json = self.construct_inspection_json(order_instance, product_instance, user, companies)
+        return JsonResponse(inspection_json, status=200)
 
-    def get_companies(self, uuid,scanloginstance):  
-            companies = []  
-            
-            company_data = {  
-            "company": {  
-            "name": 'گروه بهداشتی فیروز',
-            "nid": '10100651897',  
-            "tel": '۴۴۲۰۵۴۲۶-۴ -۰۲۱ | ۰۲۱-۴۴۲۳۶۲۵۲-۴ واحد صادرات: ۰۲۱۴۴۲۳۶۲۵۲ داخلی ۲۴۳',  
-            "address":'قزوین، شهرصنعتی البرز٬ حکمت هشتم٬ شرکت گروه بهداشتی فیروز'  ,
-            "scanDate":scanloginstance.createdAt.strftime("%Y-%m-%d %H:%M:%S")
-            }  
-            }  
-            companies.append(company_data)  
-            scanlogs_all = ScanLog.objects.filter(uuid=uuid).order_by('createdAt')  
-            logger.warning(f" scanlogs_all: {scanlogs_all.count()}")  
+    def create_inspection_detail(self, taskid, uuid):
+        try:
+            inspection = Inspection.objects.get(id=taskid)
+            if not inspection.done:
+                scanloginstance = ScanLog.objects.filter(uuid=uuid).first()
+                logger.debug(f'scanloginstance: {scanloginstance}')
+                if not scanloginstance:
+                  return self.error_response(f"Not found, there is no uuid with this value: {uuid}", 404)
+                inspection_detail = inspectionDetail.objects.create(
+                    Inspection=inspection,
+                    uid=scanloginstance
+                )
+                inspection_detail.save()
+                logger.debug(f'Created inspectionDetail: {inspection_detail}')
+            else:
+                logger.debug(f'Inspection {taskid} is already marked as done.')
+        except Inspection.DoesNotExist:
+            logger.error(f'Inspection {taskid} not found.')
 
-            for scanlog in scanlogs_all:  
-                logger.warning(f" scanlog: {scanlog.whOrderId}")  
-                if scanlog.whOrderId:  
-                     whorderinstance = WarehouseOrder.objects.filter(OrderId=scanlog.whOrderId, ordertype="outgoing").first()  
-                     logger.warning(f" whorderinstance: {whorderinstance}")  
+    def is_valid_uuid(self, uuid):
+        return uuid and len(uuid) == 20
 
-                    # Check if the WarehouseOrder instance was found  
-                     if whorderinstance:  
-                    # Retrieve the company instance  
-                        company_instance = get_object_or_404(Company, national_id=whorderinstance.DistributerCompanyNid)  
-                        logger.warning(f" company_instance: {company_instance}")  
+    def error_response(self, message, status):
+        error = {
+            "code": str(status),
+            "msg": message
+        }
+        return JsonResponse(error, status=status)
 
-                        company_data = {  
-                        "company": {  
-                        "name": company_instance.company_fa_name,  
-                        "nid": company_instance.national_id,  
-                        "tel": company_instance.phone,  
-                        "address": company_instance.address  ,
-                        "scanDate":scanlog.createdAt.strftime("%Y-%m-%d %H:%M:%S")
-                        }  
-                        }  
-                        companies.append(company_data)  
-                     else:  
-                    # Optional: Log the missing outgoing order  
-                        logger.warning(f"No outgoing warehouse order found for ScanLog ID: {scanlog.id} with whOrderId: {scanlog.whOrderId}")  
-                        
-                else:  
-                        # Optional: Log cases where whOrderId is None  
-                        logger.warning(f"ScanLog ID: {scanlog.id} does not have a valid whOrderId.")  
+    def get_companies(self, uuid, scanloginstance):
+        companies = []
 
-            return companies
+        company_data = {
+            "company": {
+                "name": 'گروه بهداشتی فیروز',
+                "nid": '10100651897',
+                "tel": '۴۴۲۰۵۴۲۶-۴ -۰۲۱ | ۰۲۱-۴۴۲۳۶۲۵۲-۴ واحد صادرات: ۰۲۱۴۴۲۳۶۲۵۲ داخلی ۲۴۳',
+                "address": 'قزوین، شهرصنعتی البرز٬ حکمت هشتم٬ شرکت گروه بهداشتی فیروز',
+                "scanDate": scanloginstance.createdAt.strftime("%Y-%m-%d %H:%M:%S")
+            }
+        }
+        companies.append(company_data)
+        scanlogs_all = ScanLog.objects.filter(uuid=uuid).order_by('createdAt')
+        logger.warning(f" scanlogs_all: {scanlogs_all.count()}")
 
-    def construct_inspection_json(self, order_instance, product_instance, user, companies):  
-      return {  
-      "Order": {  
-      "id": order_instance.OrderCode,  
-      "mfg": order_instance.ProduceDate,  
-      "exp": order_instance.ExpDate,  
-      "lot": order_instance.BatchNumber,  
-      "product": {  
-      "irc": product_instance.irc,  
-      "gtin": product_instance.gtin,  
-      "name": product_instance.product_fr_name  
-      }  
-      },  
-      "user": {  
-      "id": user.id,  
-      "fname": user.fname,  
-      "lname": user.lname,  
-      "mobile": user.mobile,  
-      "username": user.username  
-      },  
-      "date": str(datetime.datetime.now()),  
-      "companies": companies  
-      }
+        for scanlog in scanlogs_all:
+            logger.warning(f" scanlog: {scanlog.whOrderId}")
+            if scanlog.whOrderId:
+                whorderinstance = WarehouseOrder.objects.filter(OrderId=scanlog.whOrderId, ordertype="outgoing").first()
+                logger.warning(f" whorderinstance: {whorderinstance}")
+
+                # Check if the WarehouseOrder instance was found
+                if whorderinstance:
+                    # Retrieve the company instance
+                    company_instance = get_object_or_404(Company, national_id=whorderinstance.DistributerCompanyNid)
+                    logger.warning(f" company_instance: {company_instance}")
+
+                    company_data = {
+                        "company": {
+                            "name": company_instance.company_fa_name,
+                            "nid": company_instance.national_id,
+                            "tel": company_instance.phone,
+                            "address": company_instance.address,
+                            "scanDate": scanlog.createdAt.strftime("%Y-%m-%d %H:%M:%S")
+                        }
+                    }
+                    companies.append(company_data)
+                else:
+                    # Optional: Log the missing outgoing order
+                    logger.warning(f"No outgoing warehouse order found for ScanLog ID: {scanlog.id} with whOrderId: {scanlog.whOrderId}")
+
+            else:
+                # Optional: Log cases where whOrderId is None
+                logger.warning(f"ScanLog ID: {scanlog.id} does not have a valid whOrderId.")
+
+        return companies
+
+    def construct_inspection_json(self, order_instance, product_instance, user, companies):
+        return {
+            "Order": {
+                "id": order_instance.OrderCode,
+                "mfg": order_instance.ProduceDate,
+                "exp": order_instance.ExpDate,
+                "lot": order_instance.BatchNumber,
+                "product": {
+                    "irc": product_instance.irc,
+                    "gtin": product_instance.gtin,
+                    "name": product_instance.product_fr_name
+                }
+            },
+            "user": {
+                "id": user.id,
+                "fname": user.fname,
+                "lname": user.lname,
+                "mobile": user.mobile,
+                "username": user.username
+            },
+            "date": str(datetime.datetime.now()),
+            "companies": companies
+        }
+
 
 def show_inquiry_form(request):
       item={}    
