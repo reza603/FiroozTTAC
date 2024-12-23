@@ -1,59 +1,74 @@
 {% extends "_base.html" %}
-{% load static %} 
-{% load crispy_forms_tags %} 
+{% load static %}
+{% load crispy_forms_tags %}
 {% load bootstrap4 %}
+{% load jalali_tags %}
+
 {% block content %}
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
     <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1فایلهای بارگذاری شده</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-left">
-              <li class="breadcrumb-item"><a href="#">خانه</a></li>
-              <li class="breadcrumb-item active">جداول داده</li>
-            </ol>
-          </div>
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>ایجاد وظیفه جدید</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-left">
+                        <li class="breadcrumb-item"><a href="#">خانه</a></li>
+                        <li class="breadcrumb-item active">جداول داده</li>
+                    </ol>
+                </div>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
     </section>
 
-    <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <div class="col-12">
-         
-
-          <div class="card">
-            <div class="card-header">
-         
-
-           
-
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- Card header content -->
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary mt-3">ذخیره</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-<h1>Create a new task</h1>
-<form method="post" enctype="multipart/form-data">
-{% csrf_token %}
-{{ form|crispy}}
-<button type="submit">Save</button>
-</form>
+        </div>
+    </section>
+</div>
 {% endblock content %}
 
-</div>
-<!-- /.card-body -->
-</div>
-<!-- /.card -->
-</div>
-<!-- /.col -->
-</div>
-<!-- /.row -->
-</section>
-<!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+{% block extra_js %}
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Select2 CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Include Jalali Date Picker JS -->
+<script src="{% static 'inspections/jalali_date/jalali.js' %}"></script>
+<script src="{% static 'inspections/jalali_date/jquery.Bootstrap-PersianDateTimePicker.js' %}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        console.log("Initializing components...");
+
+        // Initialize Select2 for company field
+        $('#id_company').select2({
+            placeholder: "Select a company",
+            allowClear: true
+        });
+
+        // Initialize Jalali date picker
+        $('#id_referdate').persianDatepicker({
+            format: 'YYYY/MM/DD'
+        });
+    });
+</script>
+{% endblock extra_js %}

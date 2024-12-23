@@ -9,7 +9,44 @@ SECRET_KEY = 'django-insecure-$r4i7=qy1up6b+^=a3f7hvdcpk=#4j^ct=%q1buyad!@_vklp!
 DEBUG = True
 
 ALLOWED_HOSTS = ['qrcode.firooz.com', '172.16.10.27', 'localhost', '127.0.0.1', '178.252.151.59']
+# ALLOWED_HOSTS = ['199.203.18.37','185.231.115.248', '172.16.10.27', 'localhost', '127.0.0.1', '178.252.151.59']
 
+
+# default settings (optional)
+# JALALI_DATE_DEFAULTS = {
+#    # if change it to true then all dates of the list_display will convert to the Jalali.
+#    'LIST_DISPLAY_AUTO_CONVERT': False,
+#    'Strftime': {
+#         'date': '%y/%m/%d',
+#         'datetime': '%H:%M:%S _ %y/%m/%d',
+#     },
+#     'Static': {
+#         'js': [
+#             # loading datepicker
+#             'admin/js/django_jalali.min.js',
+#             # OR
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc.js',
+#             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
+#             # 'admin/js/main.js',
+#         ],
+#         'css': {
+#             'all': [
+#                 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
+#             ]
+#         }
+#     },
+# }
+LANGUAGE_CODE = 'fa'
+
+import locale
+locale.setlocale(locale.LC_ALL, "Persian_Iran.UTF-8")
+# in other OS
+# LANGUAGE_CODE = 'fa'
+
+# import locale
+# locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
 INSTALLED_APPS = [
 'django.contrib.admin',
 'django.contrib.auth',
@@ -27,6 +64,7 @@ INSTALLED_APPS = [
 'uploader',
 'order',
 'barcode',
+'jalali_date',
 'inquiryHistory',
 'customer',
 'account',
@@ -38,6 +76,8 @@ INSTALLED_APPS = [
 'Tasks',
 'companies',
 'clearcache',
+'bootstrap_datepicker_plus',
+
 ]
 
 MIDDLEWARE = [
@@ -78,7 +118,19 @@ str(BASE_DIR.joinpath('Templates'))
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+# DATABASES = {
+# 'default': {
+# 'ENGINE': 'mssql',
+# 'NAME': 'amf_db',
+# 'USER': 'sa',
+# 'PASSWORD': 'amf@sqlDeveloper',
+# 'HOST': '185.231.115.248',
+# 'PORT': '1433',
+# 'OPTIONS': {
+# 'driver': 'ODBC Driver 17 for SQL Server',
+# },
+# }
+# }
 DATABASES = {
 'default': {
 'ENGINE': 'mssql',
@@ -117,10 +169,12 @@ PASSWORD_HASHERS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'fa'
+# import locale
+# locale.setlocale(locale.LC_ALL, "fa_IR.UTF-8")
+# # TIME_ZONE = 'UTC'
 
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
+# USE_I18N = True
 
 USE_TZ = True
 
@@ -168,3 +222,7 @@ SIMPLE_JWT = {
 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5000),
 'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
 }
+STATICFILES_FINDERS = [
+
+'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]

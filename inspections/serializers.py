@@ -16,5 +16,5 @@ class InspectionSerializer(serializers.ModelSerializer):
   company = CompanySerializer() # use the nested serializer for the company field
   class Meta:
     model = Inspection
-    fields = "__all__"
+    fields =['task', 'user', 'company', 'refer_date']
    
