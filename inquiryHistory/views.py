@@ -10,7 +10,8 @@ from barcode.models import ScanLog  ,Barcode
 from account.models import WarehouseOrder  
 from products.models import Product  
 from companies.models import Company  
-from order.models import Order  
+from inspections.models import Inspection  
+from order.models import Order   
 logger = logging.getLogger(__name__)  
 
 class InspectionUUIDAPIView(APIView):  
@@ -18,10 +19,12 @@ class InspectionUUIDAPIView(APIView):
 
     def get(self, request):  
         uuid = request.GET.get('item')  
+        taskid = request.GET.get('taskid') 
         logger.debug(f'Received uuid: {uuid}')  
 
         # Validate UUID  
         if not self.is_valid_uuid(uuid):  
+            
             return self.error_response("Structure error on uuid (must be 20 digits)", 404)  
 
         # Retrieve ScanLog instance  
@@ -41,7 +44,13 @@ class InspectionUUIDAPIView(APIView):
         # Construct and return the inspection JSON response  
         inspection_json = self.construct_inspection_json(order_instance, product_instance, user, companies)  
         return JsonResponse(inspection_json, status=200)  
-
+    def mark_task_done(request):
+          user = request.user
+          taskid = request.GET.get('taskid') 
+          inspection = get_object_or_404(Inspection, id=taskid)
+          inspection.done = True
+          inspection.save()
+        #   return redirect('some_view_name')  # Redirect to a relevant page after updating
     def is_valid_uuid(self, uuid):  
       
              return uuid and len(uuid) == 20  
@@ -125,7 +134,6 @@ class InspectionUUIDAPIView(APIView):
       "date": str(datetime.datetime.now()),  
       "companies": companies  
       }
-
 def show_inquiry_form(request):
       item={}    
       return render( request,'inquiryHistory/inquiry.html',{'item': item})
