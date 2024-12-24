@@ -7,5 +7,5 @@ class InspectionForm(forms.ModelForm):
 
   class Meta:
     model = Inspection
-    fields = ['task', 'user', 'company', 'refer_date']
+    fields = ['id','task', 'user', 'company', 'refer_date']
     exclude = ['done']

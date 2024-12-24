@@ -7,18 +7,22 @@ from django.views.generic import CreateView
 from .models import Inspection
 from .forms import InspectionForm
 from django.http import request
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 from rest_framework import status
+
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from .models import Inspection
+
+
 from .serializers import InspectionSerializer
 from rest_framework import generics
 from rest_framework import viewsets
 # from jalali_date import datetime2jalali
 from .utils import datetime2jalali  # type: ignore
-from .serializers import InspectionSerializer
+
 
 
 
@@ -43,14 +47,10 @@ class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
 
     def get_queryset(self):
     # This will filter the inspection records by the user id of the current user
-     return Inspection.objects.filter(user_id=self.request.user.id)
+     return Inspection.objects.filter(user_id=self.request.user.id,done =False)
 
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Inspection
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
