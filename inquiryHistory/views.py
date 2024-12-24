@@ -96,7 +96,7 @@ class InspectionUUIDAPIView(APIView):
                 "address": 'قزوین، شهرصنعتی البرز٬ حکمت هشتم٬ شرکت گروه بهداشتی فیروز',
                 "scanDate": scanloginstance.createdAt.strftime("%Y-%m-%d %H:%M:%S")
             }
-        
+        }
         companies.append(company_data)
         scanlogs_all = ScanLog.objects.filter(uuid=uuid).order_by('createdAt')
         logger.warning(f" scanlogs_all: {scanlogs_all.count()}")

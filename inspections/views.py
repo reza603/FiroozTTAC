@@ -46,8 +46,9 @@ class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
     serializer_class = InspectionSerializer
 
     def get_queryset(self):
-    # This will filter the inspection records by the user id of the current user
-     return Inspection.objects.filter(user_id=self.request.user.id,done =False)
+        # This will filter the inspection records by the user id of the current user
+        
+        return Inspection.objects.filter(user_id=self.request.user.id,done =False)
 
 
 

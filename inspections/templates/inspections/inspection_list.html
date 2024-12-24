@@ -41,39 +41,40 @@
             <!-- /.card-header -->
             <div class="card-body">
 				<h2>لیست بازرسی ها</h2>
-				<table class=" table table-striped">
-				<thead>
-				<tr>
-				<th>عنوان</th>    
-				<th>بازرس</th>
-				<th>شرکت مقصد</th>
-				<th>تاریخ ثبت</th>
-				<th>تاریخ آخرین اصلاح</th>
-				<th>تاریخ بازرسی</th>
-				<th>وضعیت بازرسی</th>
+			<table class="table table-striped">
+<thead>
+<tr>
+<th>شماره ردیف</th>
+<th>عنوان</th>
+<th>بازرس</th>
+<th>شرکت مقصد</th>
+<th>تاریخ ثبت</th>
+<th>تاریخ آخرین اصلاح</th>
+<th>تاریخ بازرسی</th>
+<th>وضعیت بازرسی</th>
+</tr>
+</thead>
+<tbody>
+{% for inspection in object_list %}
+<tr>
+<td>{{ forloop.counter }}</td>
+<td>{{ inspection.task }}</td>
+<td>{{ inspection.user }}</td>
+<td>{{ inspection.company }}</td>
+<td>{{ inspection.date_created }}</td>
+<td>{{ inspection.date_modified }}</td>
+<td>{{ inspection.referdate }}</td>
+<td style="background-color: {% if inspection.done %}#4CAF50{% else %}#f44336{% endif %}; color: white;">
+{% if inspection.done %}
+انجام شده
+{% else %}
+ناتمام
+{% endif %}
+</td>
+</tr>
+{% endfor %}
+</tbody>
 
-				</tr>
-				</thead>
-				<tbody>
-          {% for inspection in object_list %}
-          <tr>
-          <td>{{ inspection.task }}</td>
-          <td>{{ inspection.user }}</td>
-          <td>{{ inspection.company }}</td>
-          <td>{{ inspection.date_created }}</td>
-          <td>{{ inspection.date_modified }}</td>
-          <td>{{ inspection.referdate }}</td>
-          <td style="background-color: {% if inspection.done %}#4CAF50{% else %}#f44336{% endif %}; color: white;">
-          {% if inspection.done %}
-          انجام شده
-          {% else %}
-          ناتمام
-          {% endif %}
-          </td>
-          </tr>
-          {% endfor %}
-          </tbody>
-				</table>
 {% endblock content %}
 
 </div>
@@ -91,3 +92,6 @@
 
 
 
+	</thead>
+				<tbody>
+          {% fo
