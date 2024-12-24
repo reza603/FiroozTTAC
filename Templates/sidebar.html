@@ -21,10 +21,14 @@
           </div>
           <div class="info">
             {% if user.is_authenticated %}
-           
-            <span style="Color:green"> Welcome,{{user.username}}|</span> <a href="{% url 'logout' %}" > Log Out</a>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <span style="Color:green"> خوش آمدید,{{user.username}}|</span>
+              <button type="submit"> خروج</button>
+              </form>
+             
             {% else %}
-            <a href="{% url 'login' %}" class="d-block">Log In</a>
+            <a href="{% url 'login' %}" class="d-block">ورود</a>
             {% endif %}
           </div>
         </div>

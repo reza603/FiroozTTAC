@@ -1,14 +1,18 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import UserListCreateView, UserRetrieveUpdateDestroyView, SignUpView
-
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from . import views
+        
 urlpatterns = [
     path('loginAPP/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('users/', UserListCreateView.as_view(), name='user-list-create'),
     path('users/<int:pk>/', UserRetrieveUpdateDestroyView.as_view(), name='user-detail'),
     path('signup/', SignUpView.as_view(), name='signup'),
-    
+    path('logout/', views.custom_logout, name='logout'),
+
     # API token authentication
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

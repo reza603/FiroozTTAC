@@ -15,6 +15,17 @@ from rest_framework import status
 from .models import CustomUser
 from .serializers import CustomUserSerializer
 from .forms import CustomUserCrerationForm, CustomUserChangeForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import logout
+
+
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def custom_logout(request):
+    logout(request)
+    return redirect('login')  # Redirect to your desired page
 
 # User list and create view
 class UserListCreateView(generics.ListCreateAPIView):

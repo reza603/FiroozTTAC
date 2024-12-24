@@ -37,9 +37,11 @@ from django.shortcuts import render
 from django.views import generic
 from .forms import DocumentForm
 from django.http import JsonResponse
-from .models import tblOrder,tblXmlOrders
+from .models import tblOrder,tblXmlOrders,Order
 from Shipping.models import Shipping
 from ShippingDetails.models import ShippingDetail
+from companies.models import Company
+from django.contrib.auth import logout
 
 
 from companies.models import Company
@@ -237,9 +239,10 @@ def orders_list_view(request):
 @login_required(login_url='/account/login/')
 def panel(request):
 
-   filecount=tblOrder.objects.all().count()
-   customercount=Customer.objects.all().count()
+   filecount=Order.objects.all().count()
+   customercount=Company.objects.all().count()
    productrcount=Product.objects.all().count()
+   print(filecount,customercount,productrcount)
   #  daycountinquiry/daycodecount)*100
   #  datetime.datetime.now().date().
   #  datetime.date.today()
@@ -261,7 +264,7 @@ def updatepause(request,pk):
      orders_list= tblOrder .objects.all().values();
      return render(request,'order/orders_list.html',context={'orders': orders_list})
 
-     return render(request, 'blog/post_create.html', context={'form': form})
+    #  return render(request, 'blog/post_create.html', context={'form': form})
 @login_required(login_url='/account/login/')
 def updateplay(request,pk):
     # order = get_object_or_404( tblOrder , pk=pk)

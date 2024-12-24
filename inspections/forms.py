@@ -9,7 +9,7 @@ class InspectionForm(forms.ModelForm):
 
     class Meta:
         model = Inspection
-        fields = ['task', 'user', 'company', 'refer_date', 'done']
+        fields = ['id','task', 'user', 'company', 'refer_date', 'done']
 
 
 
