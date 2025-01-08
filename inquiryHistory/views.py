@@ -1,3 +1,4 @@
+import hashlib
 import json  
 import datetime  
 import logging  
@@ -6,7 +7,7 @@ from django.shortcuts import get_object_or_404  ,render
 from django.http import JsonResponse  
 from rest_framework.permissions import IsAuthenticated  
 from rest_framework.views import APIView  
-from barcode.models import ScanLog  
+from barcode.models import ScanLog  ,Barcode
 from account.models import WarehouseOrder  
 from products.models import Product  
 from companies.models import Company  
@@ -23,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 class InspectionUUIDAPIView(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         uuid = request.GET.get('item')
         taskid = request.GET.get('taskid')
@@ -55,7 +55,6 @@ class InspectionUUIDAPIView(APIView):
         # Construct and return the inspection JSON response
         inspection_json = self.construct_inspection_json(order_instance, product_instance, user, companies)
         return JsonResponse(inspection_json, status=200)
-
     def create_inspection_detail(self, taskid, uuid):
         try:
             inspection = Inspection.objects.get(id=taskid)
@@ -74,20 +73,16 @@ class InspectionUUIDAPIView(APIView):
                 logger.debug(f'Inspection {taskid} is already marked as done.')
         except Inspection.DoesNotExist:
             logger.error(f'Inspection {taskid} not found.')
-
     def is_valid_uuid(self, uuid):
         return uuid and len(uuid) == 20
-
     def error_response(self, message, status):
         error = {
             "code": str(status),
             "msg": message
         }
         return JsonResponse(error, status=status)
-
     def get_companies(self, uuid, scanloginstance):
         companies = []
-
         company_data = {
             "company": {
                 "name": 'گروه بهداشتی فیروز',
@@ -132,7 +127,6 @@ class InspectionUUIDAPIView(APIView):
                 logger.warning(f"ScanLog ID: {scanlog.id} does not have a valid whOrderId.")
 
         return companies
-
     def construct_inspection_json(self, order_instance, product_instance, user, companies):
         return {
             "Order": {
@@ -156,9 +150,7 @@ class InspectionUUIDAPIView(APIView):
             "date": str(datetime.datetime.now()),
             "companies": companies
         }
-
-
-def show_inquiry_form(request):
+    def show_inquiry_form(request):
       item={}    
       return render( request,'inquiryHistory/inquiry.html',{'item': item})
 def uuidInquiryToInspection(request):
@@ -173,13 +165,13 @@ def uuidInquiryToInspection(request):
          
          uuid = request.GET.get('item', None)[6:20]  
          print(uuid)
-         row=Barcode.objects.filter(UUID=uuid).first()
+         row=ScanLog.objects.filter(UUID=uuid).first()
          if row  :
-              Order_row=tblOrder.objects.filter(orderid=row.tblOrder).first()
-              Orderxml_row=tblOrder.objects.filter(id=Order_row.invoicenumber).first()
+              Order_row=Order.objects.filter(orderid=row.tblOrder).first()
+            #   Orderxml_row=tblOrder.objects.filter(id=Order_row.invoicenumber).first()
               product_row=Product.objects.filter(GTIN=Order_row.gtin).first()
               company_row=Company.objects.filter(nid=Orderxml_row.oc).first()
-              user_row=CustomUser.objects.filter(id=Orderxml_row.user).first()
+            #   user_row=CustomUser.objects.filter(id=Orderxml_row.user).first()
               [{"id":"452577",
   "uid":"21996000013398957740",
   "Order":{"id":"452578","mfg":"2005-07-22","exp":"1991-03-15","lot":"58073",
@@ -206,33 +198,33 @@ def uuidInquiryToInspection(request):
               }       
          
          return JsonResponse(data)    
-# def uuidInquiry(request):
+def uuidInquiry(request):
         
-#        if request.GET.get('isuid')=='yes'  :
-#          item={}  
-#          row=[]
-#          uuid = request.GET.get('item', None)   
-#          row=Barcode.objects.filter(UUID=uuid).first()
-#          if row  :
+       if request.GET.get('isuid')=='yes'  :
+         item={}  
+         row=[]
+         uuid = request.GET.get('item', None)   
+         row=Barcode.objects.filter(UUID=uuid).first()
+         if row  :
             
-#               item={
-#                 'uuid':row.UUID
-#               }
-#               data={
-#                 'items':item
-#               }
-#          else :  
-#             item={
-#                 'uuid':''
-#               }
-#             data={
-#                 'items':item
-#               }       
+              item={
+                'uuid':row.UUID
+              }
+              data={
+                'items':item
+              }
+         else :  
+            item={
+                'uuid':''
+              }
+            data={
+                'items':item
+              }       
          
-#          return JsonResponse(data)        
+         return JsonResponse(data)        
 def RndEsalatInquiry(request):
      if request.GET.get('isuid')=='no' :
-         vitem={}  
+         item={}  
          row=[]
          rndesalat = request.GET.get('item', None)  
          rndesalat=  hashlib.sha1(rndesalat.encode('utf-8')).hexdigest().upper()
@@ -344,3 +336,31 @@ def getstatuse(request):
     response = request.get(url, headers=headers, auth=(username + '/' + domain, password))
     print(response.json())
 
+def show_inquiry_form(request):
+     item={}    
+     return render( request,'inquiryHistory/inquiry.html',{'item': item})
+def uuidInquiry(request):
+        
+       if request.GET.get('isuid')=='yes'  :
+         item={}  
+         row=[]
+         uuid = request.GET.get('item', None)   
+         row=Barcode.objects.filter(UUID=uuid).first()
+         if row  :
+            
+              item={
+                'uuid':row.UUID
+              }
+              data={
+                'items':item
+              }
+         else :  
+            item={
+                'uuid':''
+              }
+            data={
+                'items':item
+              }       
+         
+         return JsonResponse(data)
+            

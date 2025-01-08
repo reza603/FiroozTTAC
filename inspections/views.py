@@ -7,7 +7,6 @@ from django.views.generic import CreateView
 from .models import Inspection
 from .forms import InspectionForm
 from django.http import request
-
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,9 +18,6 @@ from rest_framework import viewsets
 # from jalali_date import datetime2jalali
 from .utils import datetime2jalali  # type: ignore
 from .serializers import InspectionSerializer
-
-
-
 class InspectionCreateView(CreateView):
     model = Inspection
     form_class = InspectionForm
