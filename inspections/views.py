@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from rest_framework.response import Response
+from InspectionDetails.models import inspectionDetail
 from rest_framework.decorators import api_view
 from .serializers import InspectionSerializer
 from django.views.generic import CreateView, ListView
@@ -28,9 +28,22 @@ def my_view(request):
     return render(request, 'inspections/inspection_form.html', {'jalali_date': jalali_date})
 
 
-# Create your views here.
 
 
+class TaskUUIDView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, taskid):
+        try:
+            # Get the inspection with the given taskid
+            inspection = Inspection.objects.get(task=taskid, user_id=request.user.id)
+            # Get the related inspection details
+            inspection_details = inspectionDetail.objects.filter(Inspection=inspection)
+            # Extract the uuids
+            uuids = [detail.uid.uuid for detail in inspection_details]
+            return Response({"uuids": uuids}, status=status.HTTP_200_OK)
+        except Inspection.DoesNotExist:
+         return Response({"error": "Inspection not found"}, status=status.HTTP_404_NOT_FOUND)
 class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
     # This viewset will only allow GET requests (list and retrieve)
     permission_classes = [IsAuthenticated] # This will require a valid token for authentication

@@ -7,7 +7,7 @@ from companies.models import Company
 from ShippingDetails.models import ShippingDetail
 from products.models import Product
 from inspections.models import Inspection
-from order.models import Orders
+from order.models import Order
 from django.shortcuts import get_object_or_404
 from .serializers import ItemSerializer
 from django.shortcuts import render,HttpResponseRedirect,Http404,HttpResponse

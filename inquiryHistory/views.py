@@ -19,6 +19,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from order.models import  Order
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import request
 
 logger = logging.getLogger(__name__)
 
@@ -153,6 +156,21 @@ class InspectionUUIDAPIView(APIView):
     def show_inquiry_form(request):
       item={}    
       return render( request,'inquiryHistory/inquiry.html',{'item': item})
+
+class TaskUUIDView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, taskid):
+        try:
+            # Get the inspection with the given taskid
+            inspection = Inspection.objects.get(task=taskid, user_id=request.user.id)
+            # Get the related inspection details
+            inspection_details = inspectionDetail.objects.filter(Inspection=inspection)
+            # Extract the uuids
+            uuids = [detail.uid.uuid for detail in inspection_details]
+            return Response({"uuids": uuids}, status=status.HTTP_200_OK)
+        except Inspection.DoesNotExist:
+         return Response({"error": "Inspection not found"}, status=status.HTTP_404_NOT_FOUND)
 def uuidInquiryToInspection(request):
        if request.GET.get('isuid')=='yes'  :
          item={}  
