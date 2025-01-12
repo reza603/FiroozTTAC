@@ -58,7 +58,7 @@ class InspectionUUIDAPIView(APIView):
     def create_inspection_detail(self, taskid, uuid):
         try:
             inspection = Inspection.objects.get(id=taskid)
-            if not inspection.done:
+            if  inspection:
                 scanloginstance = ScanLog.objects.filter(uuid=uuid).first()
                 logger.debug(f'scanloginstance: {scanloginstance}')
                 if not scanloginstance:

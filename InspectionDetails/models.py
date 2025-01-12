@@ -10,14 +10,9 @@ class inspectionDetail(models.Model):
     uid = models.ForeignKey('barcode.Scanlog', on_delete=models.DO_NOTHING)
     date_created=models.DateTimeField(auto_now_add=True )
     date_modified = models.DateTimeField(auto_now=True)
+    result= models.CharField(max_length = 20,null=True)
+    
     # parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
 
 
-
-
-
-
-
-
-    

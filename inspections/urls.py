@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
 InspectionCreateView,
 InspectionViewSet,
+DoneInspectionViewSet,
 inspectionListView,
 inspectionListAPIView,
 InspectionView,
@@ -18,4 +19,5 @@ path("mark-task-done/", mark_task_done, name="mark-task-done"),
 
 router = DefaultRouter()
 router.register("inspection", InspectionViewSet, basename="inspection")
+router.register("doneinspection", DoneInspectionViewSet, basename="doneinspection")
 urlpatterns += router.urls

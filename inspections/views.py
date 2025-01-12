@@ -7,17 +7,16 @@ from django.views.generic import CreateView
 from .models import Inspection
 from .forms import InspectionForm
 from django.http import request
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from .models import Inspection
 from .serializers import InspectionSerializer
 from rest_framework import generics
 from rest_framework import viewsets
 # from jalali_date import datetime2jalali
 from .utils import datetime2jalali  # type: ignore
-from .serializers import InspectionSerializer
 class InspectionCreateView(CreateView):
     model = Inspection
     form_class = InspectionForm
@@ -38,15 +37,16 @@ class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
     serializer_class = InspectionSerializer
 
     def get_queryset(self):
-    # This will filter the inspection records by the user id of the current user
-     return Inspection.objects.filter(user_id=self.request.user.id)
+        # This will filter the inspection records by the user id of the current user
+        return Inspection.objects.filter(user_id=self.request.user.id,done =False)
 
+class DoneInspectionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = InspectionSerializer
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Inspection
+    def get_queryset(self):
+        return Inspection.objects.filter(user_id=self.request.user.id, done=True)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
