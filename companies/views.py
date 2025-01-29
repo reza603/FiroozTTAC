@@ -26,6 +26,7 @@ class CompanyListView(ListView):
     template_name = "companies/company_list.html"
     
 class CompanyAPIView(generics.ListAPIView):
+  # queryset = Company.objects.all().order_by('company_fa_name')
   queryset = Company.objects.all().order_by('company_fa_name')
 
   serializer_class = CompanySerializer

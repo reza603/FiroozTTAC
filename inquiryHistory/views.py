@@ -3,10 +3,11 @@ import datetime
 import logging  
 import  requests
 from django.shortcuts import get_object_or_404  ,render
-from django.http import JsonResponse  
+from django.http import HttpResponse, JsonResponse  
 from rest_framework.permissions import IsAuthenticated  
 from rest_framework.views import APIView  
-from barcode.models import ScanLog  
+from barcode.models import ScanLog 
+from barcode.models import Barcode
 from account.models import WarehouseOrder  
 from products.models import Product  
 from companies.models import Company  
@@ -48,7 +49,7 @@ class InspectionUUIDAPIView(APIView):
         user = request.user
 
         # Insert into inspectionDetail if taskid is provided
-        if taskid:
+        if self.is_valid_taskid(taskid):
             logger.debug('if taskid :')
             self.create_inspection_detail(taskid, uuid)
 
@@ -59,7 +60,7 @@ class InspectionUUIDAPIView(APIView):
     def create_inspection_detail(self, taskid, uuid):
         try:
             inspection = Inspection.objects.get(id=taskid)
-            if not inspection.done:
+            if inspection:
                 scanloginstance = ScanLog.objects.filter(uuid=uuid).first()
                 logger.debug(f'scanloginstance: {scanloginstance}')
                 if not scanloginstance:
@@ -77,7 +78,8 @@ class InspectionUUIDAPIView(APIView):
 
     def is_valid_uuid(self, uuid):
         return uuid and len(uuid) == 20
-
+    def is_valid_taskid(self, tskid):
+        return tskid and len(tskid)>1
     def error_response(self, message, status):
         error = {
             "code": str(status),
@@ -104,7 +106,7 @@ class InspectionUUIDAPIView(APIView):
         for scanlog in scanlogs_all:
             logger.warning(f" scanlog: {scanlog.whOrderId}")
             if scanlog.whOrderId:
-                whorderinstance = WarehouseOrder.objects.filter(OrderId=scanlog.whOrderId).first()
+                whorderinstance = WarehouseOrder.objects.filter(OrderId=scanlog.whOrderId,ordertype='outgoing').first()
                 logger.warning(f" whorderinstance: {whorderinstance}")
 
                 # Check if the WarehouseOrder instance was found
@@ -284,7 +286,7 @@ def getSMS(request):
         text="طول کد ارسالی نامعتبر است"
     else:
          text="اصالت کالا مورد تایید نیست"    
-         endSmsViaGet (text,frm)
+         sendSmsViaGet (text,frm)
          return HttpResponse(text )
 def sendSMS(text,to):
     #

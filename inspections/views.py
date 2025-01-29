@@ -9,14 +9,9 @@ from .forms import InspectionForm
 from django.http import request
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-
 from rest_framework import status
-
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-
 from .serializers import InspectionSerializer
 from rest_framework import generics
 from rest_framework import viewsets
@@ -38,8 +33,6 @@ def my_view(request):
 
 
 # Create your views here.
-
-
 class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
     # This viewset will only allow GET requests (list and retrieve)
     permission_classes = [IsAuthenticated] # This will require a valid token for authentication
@@ -49,9 +42,6 @@ class InspectionViewSet(viewsets.ReadOnlyModelViewSet):#it is ok
         # This will filter the inspection records by the user id of the current user
         
         return Inspection.objects.filter(user_id=self.request.user.id,done =False)
-
-
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
